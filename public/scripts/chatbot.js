@@ -5,6 +5,7 @@ import { executeRestartAzureAgentLinux } from './restartAzureAgentLinux.js';
 import { executeHelloWorldScript } from './helloWorldScript.js';
 import { executegetosdetailsPlaybook } from './getosdetails.js';
 
+
 const chatContainer = document.getElementById('chat-container');
 const chatBox = document.getElementById('chat-box');
 const chatInput = document.getElementById('chat-input');
@@ -139,7 +140,9 @@ function respondToUser(userMessage) {
         } else if (userMessage === "run ansible test playbook") {
             executeAnsibleTestPlaybook(addMessage);
         } else if (userMessage === "run getosdetails playbook") { // Handle the new playbook command
-            executegetosdetailsPlaybook(addMessage); // Call the function to execute the new playbook
+            executegetosdetailsPlaybook(addMessage); // Call the function to execute the new playboo
+        } else if (userMessage === "install ansible") { // Handle the new playbook command
+            executeinstallansible(addMessage); // Call the function to execute the new playbook    // k
         } else if (userMessage === "restartazureagent_linux") {
             executeRestartAzureAgentLinux(addMessage);
         } else if (userMessage === "execute hello.sh") {
@@ -242,6 +245,32 @@ function executeHelloScript(addMessage) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ scriptPath: 'hello.sh' }) // Pass only the script name
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json(); // Expect JSON response from the backend
+    })
+    .then(data => {
+        if (data.error) {
+            addMessage(`Error executing script: ${data.error}`, 'bot');
+        } else {
+            addMessage(`Script executed successfully: ${data.output}`, 'bot');
+        }
+    })
+    .catch(error => {
+        console.error('Error executing script:', error);
+        addMessage(`Error: ${error.message}`, 'bot');
+    });
+}
+
+function executeinstallansible(addMessage) {
+    addMessage("installing ansible...", 'bot'); // Inform the user about script execution
+    fetch('/run-script-installansible', { // Use the correct backend endpoint
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ scriptPath: 'ansible.sh' }) // Pass only the script name
     })
     .then(response => {
         if (!response.ok) {

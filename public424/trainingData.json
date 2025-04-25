@@ -27,6 +27,7 @@
         "my name is vilas": "Nice to meet you, Vilas!",
         "what is my name": "I'm sorry, I don't know your name yet. You can tell me by saying 'my name is [your name]'.",
         "execute hello.sh": "Executing hello.sh script...",
+        "install ansible": "Installing ansible...",
         "run getosdetails playbook": "Executing getosdetails playbook..."
     },
      
@@ -57,6 +58,7 @@
         "ucd install doc": "ucd install doc",
         "run ansible test playbook": "run ansible test playbook",
         "run hello world script": "run hello world script",
+        "install ansible": "install ansible",
         "run getosdetails playbook": "run getosdetails playbook"
     }
 }
