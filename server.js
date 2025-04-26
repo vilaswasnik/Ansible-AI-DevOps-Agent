@@ -12,9 +12,9 @@ app.use(express.json());
 // Ensure static files are served from 'public'
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Serve the chatbot HTML file
+// Serve the aiagent HTML file
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'chatbot.html'));
+    res.sendFile(path.join(__dirname, 'public', 'aiagent.html'));
 });
 
 // Endpoint to run a script

@@ -1,7 +1,7 @@
 {
-  "name": "aara-ai-agent",
+  "name": "ucdaiagent",
   "version": "1.0.0",
-  "description": "A chatbot AI agent with server-side functionality.",
+  "description": "An AI agent with server-side functionality.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
