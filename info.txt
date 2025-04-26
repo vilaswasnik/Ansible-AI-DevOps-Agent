@@ -9,7 +9,7 @@ next steps
 4. use of API - LLM   ( )
 5. user name login password 
 6. create a docker image , push image to other server and test 
-7. 
+
 
 
 Draw Architecture
