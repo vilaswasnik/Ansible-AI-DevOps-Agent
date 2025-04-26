@@ -1,8 +1,8 @@
 {
     "hostRequirements": {
-        "storage": "128gb"
+        "storage": "32gb" // Adjust to match your current storage
     },
-    "name": "AARA AI Agent",
+    "name": "ucdaiagent",
     "build": {
         "dockerfile": "../Dockerfile",
         "context": ".."
