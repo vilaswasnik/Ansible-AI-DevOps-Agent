@@ -18,7 +18,8 @@
         "run ansible test playbook": "Executing Ansible test playbook...",
         "run hello world script": "Executing Hello World script...",
         "my name is vilas": "Nice to meet you, Vilas!",
-        "what is my name": "I'm sorry, I don't know your name yet. You can tell me by saying 'my name is [your name]'.",
+        "what is my name": "I'm sorry, I 
+        don't know your name yet. You can tell me by saying 'my name is [your name]'.",
         "execute hello.sh": "Executing hello.sh script...",
         "install ansible": "Installing ansible...",
         "run getosdetails playbook": "Executing getosdetails playbook..."
