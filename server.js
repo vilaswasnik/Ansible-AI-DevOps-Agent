@@ -17,7 +17,7 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'aiagent.html'));
 });
 
-// Endpoint to run a script
+// Endpoint to run a shell script present at script folder -need to remove
 app.post('/run-script', (req, res) => {
     const { scriptPath } = req.body;
     if (!scriptPath) {
@@ -40,6 +40,51 @@ app.post('/run-script', (req, res) => {
         res.json({ output: stdout.trim() });
     });
 });
+
+
+// Endpoint to run a shell script hello2.sh
+app.post('/run-shellscript', (req, res) => {
+    const { scriptPath } = req.body;
+
+    // Validate scriptPath
+    if (!scriptPath) {
+        console.error('Script path is missing in the request.');
+        return res.status(400).json({ error: 'Script path is required' });
+    }
+    if (scriptPath.includes('..')) {
+        console.error('Invalid script path detected.');
+        return res.status(400).json({ error: 'Invalid script path' });
+    }
+    if (!scriptPath.endsWith('.sh')) {
+        console.error('Invalid script type. Only .sh scripts are allowed.');
+        return res.status(400).json({ error: 'Invalid script type' });
+    }
+
+    // Resolve the full path to the script
+    const fullScriptPath = path.join(__dirname, 'public', 'scripts', 'shell_scripts', scriptPath);
+
+    // Check if the script exists
+    const fs = require('fs');
+    if (!fs.existsSync(fullScriptPath)) {
+        console.error(`Script not found: ${fullScriptPath}`);
+        return res.status(404).json({ error: 'Script not found' });
+    }
+
+    console.log(`Received request to execute script: ${scriptPath}`);
+    console.log(`Resolved full script path: ${fullScriptPath}`);
+
+    // Execute the script with a timeout
+    exec(`sh ${fullScriptPath}`, { timeout: 5000 }, (error, stdout, stderr) => {
+        if (error) {
+            console.error(`Error executing script: ${stderr}`);
+            return res.status(500).json({ error: stderr.trim() });
+        }
+        console.log(`Script executed successfully. Output: ${stdout}`);
+        res.json({ output: stdout.trim() });
+    });
+});
+
+
 
 // Endpoint to run a installansible
 app.post('/run-script-installansible', (req, res) => {

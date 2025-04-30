@@ -3,8 +3,8 @@ import { executeGetOSDetailsLinux } from './getOSDetailsLinux.js';
 import { executeAnsibleTestPlaybook } from './ansibleTestPlaybook.js';
 import { executeRestartAzureAgentLinux } from './restartAzureAgentLinux.js';
 import { executeHelloWorldScript } from './helloWorldScript.js';
+import { executehello2script } from './shell_scripts_js/hello2.js';
 import { executegetosdetailsPlaybook } from './getosdetails.js';
-
 
 const chatContainer = document.getElementById('chat-container');
 const chatBox = document.getElementById('chat-box');
@@ -145,6 +145,8 @@ function respondToUser(userMessage) {
             executeinstallansible(addMessage); // Call the function to execute the new playbook
         } else if (userMessage === "restartazureagent_linux") {
             executeRestartAzureAgentLinux(addMessage);
+        } else if (userMessage === "execute hello2.sh") {
+            executehello2script(addMessage);
         } else if (userMessage === "execute hello.sh") {
             executeHelloScript(addMessage);
         } else {
