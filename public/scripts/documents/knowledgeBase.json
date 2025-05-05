@@ -1,0 +1,178 @@
+{
+    "components": {
+        "user_interface": {
+            "description": "The user interacts with the chatbot by typing commands like 'run getosdetails playbook'. The chatbot sends the command to chatbot.js.",
+            "example_queries": [
+                "How do I interact with the chatbot?",
+                "What commands can I type in the chatbot?"
+            ]
+        },
+        "chatbot_js": {
+            "description": "Handles user input and determines the appropriate action. Calls functions like executegetosdetailsPlaybook from playbook.js.",
+            "example_queries": [
+                "What does chatbot.js do?",
+                "How does the chatbot process my input?"
+            ]
+        },
+        "playbook_js": {
+            "description": "Contains logic for sending API requests to the backend (server.js). Sends the playbook name and inventory file to the /run-playbook endpoint.",
+            "example_queries": [
+                "What is playbook.js used for?",
+                "How are playbooks executed?"
+            ]
+        },
+        "server_js": {
+            "description": "Backend server that processes API requests. Resolves the playbook and inventory paths and executes the playbook using ansible-playbook.",
+            "example_queries": [
+                "What is the role of server.js?",
+                "How does the backend execute playbooks?"
+            ]
+        },
+        "ansible": {
+            "description": "Executes the specified playbook (e.g., getosdetails.yml) using the inventory file. Produces output, such as system details or task results.",
+            "example_queries": [
+                "What is Ansible used for?",
+                "Can you run an Ansible playbook for me?"
+            ]
+        },
+        "output": {
+            "description": "The playbook output is sent back to the frontend via the API. The chatbot displays the results to the user.",
+            "example_queries": [
+                "How is the output displayed?",
+                "Can I see the results of the executed playbook?"
+            ]
+        }
+    },
+    "next_steps": {
+        "add_more_playbooks": "Create additional playbooks for different tasks and integrate them into the chatbot.",
+        "test_api": "Use tools like curl or Postman to test the /run-playbook endpoint.",
+        "add_variations": "Add more commands and variations to the chatbot's predefined answers.",
+        "integrate_llm_api": "Use a language model API (e.g., OpenAI GPT) for advanced chatbot responses.",
+        "user_authentication": "Implement username/password login functionality.",
+        "dockerize_application": "Create a Docker image for the application, push it to a server, and test it.",
+        "example_queries": [
+            "What are the next steps for this project?",
+            "How can I add more playbooks?",
+            "Can you explain how to test the API?"
+        ]
+    },
+    "project_overview": {
+        "purpose": "The UCD AI Agent project is a chatbot-based automation tool designed to execute various system-level scripts and commands.",
+        "key_features": [
+            "Execute shell scripts like hello.sh and ansible.sh.",
+            "Run Ansible playbooks for system automation.",
+            "Fetch OS details and restart services.",
+            "Interactive chatbot interface with predefined responses and spell correction.",
+            "Speech synthesis for bot responses."
+        ],
+        "example_queries": [
+            "What is the purpose of this project?",
+            "What are the key features of the UCD AI Agent?"
+        ]
+    },
+    "software_requirements": {
+        "installed_software": [
+            "Node.js: Backend server for handling requests and executing scripts.",
+            "Ansible: For running playbooks and automating system tasks.",
+            "Web Browser: For accessing the chatbot interface.",
+            "Linux Shell: For executing shell scripts."
+        ],
+        "dependencies": [
+            "Frontend: HTML, CSS, JavaScript.",
+            "Backend: Node.js with Express.js.",
+            "Other Tools: Speech synthesis API for voice responses."
+        ],
+        "example_queries": [
+            "What software is required for this project?",
+            "What dependencies does the chatbot have?"
+        ]
+    },
+    "project_logic": {
+        "core_functionalities": {
+            "chatbot_interface": "Accepts user input and matches it with predefined commands. Provides responses based on predefined answers or executes specific functions.",
+            "script_execution": "Executes shell scripts like hello.sh and ansible.sh via backend endpoints. Displays the output or error messages in the chat interface.",
+            "ansible_playbooks": "Executes playbooks for tasks like fetching OS details or restarting services.",
+            "spell_correction": "Corrects minor spelling mistakes in user input to improve command recognition.",
+            "speech_synthesis": "Converts bot responses into speech for better user interaction."
+        },
+        "example_queries": [
+            "What are the core functionalities of the chatbot?",
+            "How does the chatbot execute scripts?",
+            "Can the chatbot correct spelling mistakes?"
+        ]
+    },
+    "design": {
+        "frontend": {
+            "description": "HTML/CSS provides the chatbot interface. JavaScript handles user input, bot responses, and API calls.",
+            "example_queries": [
+                "What technologies are used in the frontend?",
+                "How does the chatbot handle user input?"
+            ]
+        },
+        "backend": {
+            "description": "Node.js processes user requests and executes scripts.",
+            "endpoints": [
+                "/run-script: Executes shell scripts.",
+                "/run-script-installansible: Installs Ansible."
+            ],
+            "example_queries": [
+                "What are the backend endpoints?",
+                "How does the backend process requests?"
+            ]
+        },
+        "data_flow": "User sends a message via the chat interface. The message is processed and matched with predefined commands. If a script needs to be executed, a request is sent to the backend. The backend executes the script and returns the output. The output is displayed in the chat interface.",
+        "example_queries": [
+            "Can you explain the data flow of the chatbot?",
+            "How is the output sent back to the user?"
+        ]
+    },
+    "execution_flow": {
+        "example": "Executing hello.sh",
+        "steps": [
+            "User Input: The user types 'execute hello.sh' in the chat.",
+            "Frontend: The executeHelloScript() function is called. A POST request is sent to the /run-script endpoint with the script name.",
+            "Backend: The server executes hello.sh using a child process. The output or error is returned as a JSON response.",
+            "Frontend: The response is displayed in the chat interface."
+        ],
+        "example_queries": [
+            "How does the chatbot execute hello.sh?",
+            "What is the execution flow for running a script?"
+        ]
+    },
+    "advantages": [
+        "Simplifies system automation with a user-friendly chatbot interface.",
+        "Reduces manual effort by automating repetitive tasks.",
+        "Provides real-time feedback for executed commands.",
+        "Supports spell correction for better user experience."
+    ],
+    "disadvantages": [
+        "Limited to predefined commands and scripts.",
+        "Requires backend setup and proper script permissions.",
+        "Dependent on the availability of required software (e.g., Ansible)."
+    ],
+    "how_to_use": {
+        "setup": [
+            "Clone the repository.",
+            "Install dependencies.",
+            "Start the server.",
+            "Open the chatbot interface in a web browser."
+        ],
+        "executing_commands": "Type commands like 'execute hello.sh' or 'install ansible' in the chat input box. The bot will process the command and display the output.",
+        "example_queries": [
+            "How do I set up the chatbot?",
+            "How do I execute commands using the chatbot?"
+        ]
+    },
+    "problems_solved": [
+        "Automates repetitive system tasks.",
+        "Provides a centralized interface for managing scripts and playbooks.",
+        "Reduces the need for manual command-line operations."
+    ],
+    "future_scope": [
+        "Add support for more scripts and playbooks.",
+        "Implement user authentication for secure access.",
+        "Enhance the chatbot with AI-based natural language processing.",
+        "Add logging and monitoring for executed commands.",
+        "Support multi-platform compatibility (Windows, macOS)."
+    ]
+}

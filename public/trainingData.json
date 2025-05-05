@@ -7,14 +7,14 @@
         "open ucd agent logs": "You can open UCD agent Logs by clicking <a href='https://xyz' target='_blank'>here</a>.",
         "show me ucd agent logs": "You can open UCD agent Logs by clicking <a href='https://xyz' target='_blank'>here</a>.",
         "how are you": "I'm just an AI agent, that can perform only certain tasks given in the list for you!",
-        "what can you do": "I can help you with tasks like opening UCD home page, showing UCD agent logs, creating Azure features, and more.",
+        "what can you do": "I can assist with tasks like running playbooks, fetching OS details, restarting services, and more. Just type your query!",
         "who created you": "I was created by a UCD team member to assist with some specific tasks.",
         "thank you": "You're welcome! If you have any other task, feel free to ask.",
         "getosdetails_linux": "You can get OS details for Linux by running the command: `uname -a`.",
         "hello": "Hello! How can I assist you today?",
         "hi": "Hi there! How can I help you?",
         "hey": "Hey! What can I do for you?",
-        "aara": "How are you aara, you are so cute? and your smile so cute",
+        "aara": "How are you aara, you are so cute? and your smile so cute.",
         "run ansible test playbook": "Executing Ansible test playbook...",
         "run hello world script": "Executing Hello World script...",
         "my name is vilas": "Nice to meet you, Vilas!",
@@ -22,9 +22,20 @@
         "execute hello.sh": "Executing hello.sh script...",
         "install ansible": "Installing ansible...",
         "execute hello2.sh": "Executing hello2.sh script...",
-        "run getosdetails playbook": "Executing getosdetails playbook..."
+        "run getosdetails playbook": "Executing getosdetails playbook...",
+        "how to install ansible": "To install Ansible, type 'install ansible' in the chatbot or follow the official documentation <a href='https://docs.ansible.com' target='_blank'>here</a>.",
+        "how to execute hello.sh": "To execute hello.sh, type 'execute hello.sh' in the chatbot.",
+        "how to restart ucd agent": "To restart the UCD agent, type 'open restart ucd agent' or follow the instructions <a href='https://xyz' target='_blank'>here</a>.",
+        "how to view logs": "To view logs, type 'show me ucd agent logs' or click <a href='https://xyz' target='_blank'>here</a>.",
+        "what is ansible": "Ansible is an open-source automation tool used for configuration management, application deployment, and task automation.",
+        "what is ucd": "UCD (UrbanCode Deploy) is a tool for automating application deployments across environments.",
+        "how to run playbooks": "To run playbooks, type commands like 'run ansible test playbook' or 'run getosdetails playbook'.",
+        "how to fetch os details": "To fetch OS details, type 'getosdetails_linux' or run the playbook 'getosdetails.yml'.",
+        "how to create azure feature": "To create an Azure feature, type 'create azure feature and story'.",
+        "how to install software": "To install software, type commands like 'install ansible' or 'install azure agent'.",
+        "help": "Here are some things you can ask me: 'run ansible test playbook', 'install ansible', 'execute hello.sh', or 'how to restart ucd agent'.",
+        "i don't understand": "I'm sorry, I didn't understand that. Can you try rephrasing your question or typing 'help' for a list of commands?"
     },
-     
     "spellCorrections": {
         "helo": "hello",
         "hallo": "hello",
@@ -54,6 +65,11 @@
         "run hello world script": "run hello world script",
         "run hello2 world script": "run hello2 world script",
         "install ansible": "install ansible",
-        "run getosdetails playbook": "run getosdetails playbook"
+        "run getosdetails playbook": "run getosdetails playbook",
+        "ansible instal": "install ansible",
+        "restart ucd": "open restart ucd agent",
+        "view logs": "show me ucd agent logs",
+        "fetch os details": "getosdetails_linux",
+        "run playbook": "run ansible test playbook"
     }
 }
