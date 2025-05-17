@@ -3,7 +3,7 @@ const OpenAI = require('openai');
 require('dotenv').config();
 
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY, // Ensure your .env file has this variable set
+  apiKey: process.env.OPENAI_API_KEY,
 });
 
 async function askOpenAI(prompt) {
@@ -14,7 +14,18 @@ async function askOpenAI(prompt) {
       max_tokens: 150,
       temperature: 0.7,
     });
-    return response.choices[0].message.content.trim();
+
+    if (
+      response &&
+      response.choices &&
+      response.choices.length > 0 &&
+      response.choices[0].message &&
+      response.choices[0].message.content
+    ) {
+      return response.choices[0].message.content.trim();
+    } else {
+      throw new Error('No response from OpenAI API.');
+    }
   } catch (error) {
     console.error('Error with OpenAI API:', error.response ? error.response.data : error.message);
     throw new Error('Failed to fetch response from OpenAI.');

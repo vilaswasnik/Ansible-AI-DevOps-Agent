@@ -168,8 +168,20 @@ function respondToUser(userMessage) {
             }
         }
     } else {
-        // Use OpenAI to map to the best predefined command
-        askOpenAIThroughBackend(userMessage, addMessage);
+        const suggestion = getSuggestion(userMessage);
+        if (suggestion) {
+            lastSuggestion = suggestion;
+            const botResponse = `Did you mean "${suggestion}"?`;
+            setTimeout(() => {
+                addMessage(botResponse, 'bot');
+                if (!isMuted) {
+                    speak(botResponse);
+                }
+            }, 500);
+        } else {
+            // If no suggestion, send to OpenAI
+            askOpenAIThroughBackend(userMessage, addMessage);
+        }
     }
 }
 
@@ -297,9 +309,8 @@ async function askOpenAIThroughBackend(prompt, addMessage) {
             body: JSON.stringify({ message: prompt })
         });
         const data = await response.json();
-        if (data.matchedKey && predefinedAnswers[data.matchedKey]) {
-            // Now call respondToUser with the matched key to trigger the right function
-            respondToUser(data.matchedKey);
+        if (data.response) {
+            addMessage(data.response, 'bot');
         } else {
             addMessage("Sorry, I couldn't get a response from AI.", 'bot');
         }

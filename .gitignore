@@ -1,2 +1,3 @@
-.env
-ansible/
+# Remove .env and ansible/ from being ignored
+# .env
+# ansible/

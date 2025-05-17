@@ -297,9 +297,8 @@ async function askOpenAIThroughBackend(prompt, addMessage) {
             body: JSON.stringify({ message: prompt })
         });
         const data = await response.json();
-        if (data.matchedKey && predefinedAnswers[data.matchedKey]) {
-            // Now call respondToUser with the matched key to trigger the right function
-            respondToUser(data.matchedKey);
+        if (data.response) {
+            addMessage(data.response, 'bot');
         } else {
             addMessage("Sorry, I couldn't get a response from AI.", 'bot');
         }

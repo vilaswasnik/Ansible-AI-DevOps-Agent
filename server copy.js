@@ -3,41 +3,6 @@ const { exec } = require('child_process');
 const cors = require('cors');
 const path = require('path');
 const { askOpenAI } = require('./public/scripts/openai');
-const predefinedAnswers = require('./public/trainingData.json').predefinedAnswers;
-
-// Optional: Levenshtein distance for fuzzy matching
-function levenshteinDistance(a, b) {
-    const matrix = [];
-    for (let i = 0; i <= b.length; i++) matrix[i] = [i];
-    for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
-    for (let i = 1; i <= b.length; i++) {
-        for (let j = 1; j <= a.length; j++) {
-            if (b.charAt(i - 1) === a.charAt(j - 1)) {
-                matrix[i][j] = matrix[i - 1][j - 1];
-            } else {
-                matrix[i][j] = Math.min(
-                    matrix[i - 1][j - 1] + 1,
-                    Math.min(matrix[i][j - 1] + 1, matrix[i - 1][j] + 1)
-                );
-            }
-        }
-    }
-    return matrix[b.length][a.length];
-}
-
-function findClosestKey(input, keys) {
-    let minDistance = Infinity;
-    let closestKey = null;
-    for (const key of keys) {
-        const distance = levenshteinDistance(input, key);
-        if (distance < minDistance) {
-            minDistance = distance;
-            closestKey = key;
-        }
-    }
-    // Only return if it's reasonably close (tune threshold as needed)
-    return minDistance <= 2 ? closestKey : null;
-}
 
 const app = express();
 const port = 3000;
@@ -197,26 +162,12 @@ app.post('/run-command', (req, res) => {
 // Endpoint to handle chatbot messages
 app.post('/chatbot', async (req, res) => {
     const { message } = req.body;
-    const predefinedKeys = Object.keys(predefinedAnswers);
-
-    const prompt = `
-You are a helpful assistant. Here are the commands I understand:
-${predefinedKeys.map(key => `- ${key}`).join('\n')}
-
-User asked: "${message}"
-
-Reply with the exact command key from the list above that best matches the user's request. If none match, reply with "none".
-`;
-
+    if (!message) {
+        return res.status(400).json({ error: 'Message is required' });
+    }
     try {
-        const aiResponse = await askOpenAI(prompt);
-        let matchedKey = aiResponse.trim().toLowerCase();
-        if (matchedKey === "none") matchedKey = null;
-        // Fuzzy match if OpenAI's response is close but not exact
-        if (matchedKey && !predefinedAnswers[matchedKey]) {
-            matchedKey = findClosestKey(matchedKey, predefinedKeys);
-        }
-        res.json({ matchedKey });
+        const aiResponse = await askOpenAI(message);
+        res.json({ response: aiResponse });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

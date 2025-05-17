@@ -1,32 +1,29 @@
-# Use a base image with Python pre-installed
-FROM python:3.9-slim
+# Use the official Node.js image as the base image
+FROM node:20
+
+# Install Python3, pip, and Ansible using apt
+RUN apt-get update && \
+    apt-get install -y python3 python3-pip ansible
+
+WORKDIR /app
+
+# ...rest of your Dockerfile...
+
 
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy the application code to the container
-COPY . .
+# Copy package.json and package-lock.json to the working directory
+COPY package*.json ./
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    curl \
-    git \
-    vim \
-    docker.io \
-    ansible \
-    nodejs \
-    npm \
-    && rm -rf /var/lib/apt/lists/*
-
-# Install Python dependencies
-RUN pip3 install --no-cache-dir -r requirements.txt
-
-# Install Node.js dependencies
+# Install dependencies
 RUN npm install
 
-# Expose the application port
+# Copy the rest of the application code to the working directory
+COPY . .
+
+# Expose the port your app runs on
 EXPOSE 3000
 
 # Start the application
-CMD ["python3", "app.py"]
+CMD ["node", "server.js"]

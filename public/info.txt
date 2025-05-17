@@ -1,52 +1,17 @@
-tar -czvf aara-ai-agent_2.tar.gz .
+docker image
+docker ps -a
+
+docker build -t ucdaiagent .
+
+
+docker tag ucdaiagent vilaswasnik/ucdaiagent:latest
+docker rmi vilaswasnik/ucdaiagent:latest    ( untag and remove)
 
 
 
-+-------------------+
-|   User Interface  |
-| (Chatbot Frontend)|
-+-------------------+
-          |
-          v
-+-------------------+
-|   chatbot.js      |
-| (Handles user     |
-|  input and calls  |
-|  appropriate APIs)|
-+-------------------+
-          |
-          v
-+-------------------+
-|   playbook.js     |
-| (Frontend logic   |
-|  for executing    |
-|  playbooks via API|
-+-------------------+
-          |
-          v
-+-------------------+
-|   server.js       |
-| (Backend server   |
-|  handling API     |
-|  requests and     |
-|  executing Ansible|
-|  playbooks)       |
-+-------------------+
-          |
-          v
-+-------------------+
-|   Ansible         |
-| (Executes         |
-|  playbooks like   |
-|  getosdetails.yml)|
-+-------------------+
-          |
-          v
-+-------------------+
-|   Output          |
-| (Playbook results |
-|  returned to the  |
-|  chatbot and      |
-|  displayed to the |
-|  user)            |
-+-------------------+
+docker build -t vilaswasnik/ucdaiagent:latest .
+docker login --username vilaswasnik  VEron@16123
+docker push vilaswasnik/ucdaiagent:latest
+
+----------------
+
