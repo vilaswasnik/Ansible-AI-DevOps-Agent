@@ -1,25 +1,31 @@
-# ucdai
-1. integrate openai api.  - DONE
-2. create web site domain in codespace pages , its free for pro users for private repo. - need to understadnd as it jsut support index.html not node js
-3. craete docker contatiner  - create - need to check ansible scripts execution - 
+# RAG AI DevOps Agent
 
-4. push to kubernetes cluster and try hosting  - pending 
-5. further adjustments in the code for removing unwanted code , creating shell script for autoamtion of these these things  - pending 
-6. code for Ansible api use ( host ansible awxenvironment and test) ---pending 
-7. 
- what are teh other things you can do ?  - list the things 
- 
-8.devlop knowledgebase and call documents -pending 
---
+## Project Overview
+This is an AI-powered DevOps agent with RAG (Retrieval-Augmented Generation) capabilities.
 
+## Completed Features
+1. ✅ Integrate OpenAI API - DONE
+2. ✅ Web interface with chat functionality
+3. ✅ Docker container setup
+4. ✅ Shell script execution capabilities
+5. ✅ Ansible playbook integration
 
-1. Create our own LLM model for NLP - natural language processing 
-2. vector embedding for common documentation
-3. vector embedding through URL 
-4. add a logic to retrive data from website 
-5. add a logic to call ansible API and with pdf and logic , means it should ask to enter server name, path etc what ever required for that playbook to run - 
-6. understand agentic and generative
-7. login /log off 
+## Pending Features
+4. Push to Kubernetes cluster and hosting
+5. Code optimization and automation scripts
+6. Ansible API integration with AWX environment
+7. Knowledge base development with document retrieval
+8. Custom LLM model for NLP
+9. Vector embedding for documentation
+10. Vector embedding through URL
+11. Website data retrieval logic
+12. Ansible API with PDF logic (server name, path inputs)
+13. Agentic and generative AI understanding
+14. Enhanced login/logout functionality
 
-
-
+## Technical Stack
+- Node.js/Express backend
+- OpenAI API integration
+- Ansible automation
+- Docker containerization
+- Shell script execution
