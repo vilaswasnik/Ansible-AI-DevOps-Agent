@@ -6,7 +6,7 @@ function executegetosdetailsPlaybook(addMessage) {
         isCancelled = false;
         return;
     }
-    addMessage("Executing Ansible test playbook...", 'bot');
+    addMessage("Executing getosdetails Ansible playbook...", 'bot');
     const playbookPath = 'getosdetails.yml'; // Playbook name
     const inventoryPath = 'inventory'; // Inventory file name
 

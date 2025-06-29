@@ -1,10 +1,15 @@
-import { cancelOperation } from './ansiblePlaybooks.js';
-import { executeGetOSDetailsLinux } from './getOSDetailsLinux.js';
-import { executeAnsibleTestPlaybook } from './ansibleTestPlaybook.js';
-import { executeRestartAzureAgentLinux } from './restartAzureAgentLinux.js';
-import { executeHelloWorldScript } from './helloWorldScript.js';
+//for shell_scripts
+import { executehellooscript } from './shell_scripts_js/helloo.js';
 import { executehello2script } from './shell_scripts_js/hello2.js';
-import { executegetosdetailsPlaybook } from './getosdetails.js';
+import { executemakefolderscript } from './shell_scripts_js/makefolder.js';
+import { executehelloscript } from './shell_scripts_js/hello.js';
+
+
+//for ansible playbooks
+import { executeAnsibleTestPlaybook } from './ansible_scripts_js/ansibleTestPlaybook.js';
+import { executegetosdetailsPlaybook } from './ansible_scripts_js/getosdetails.js';
+
+
 
 const chatContainer = document.getElementById('chat-container');
 const chatBox = document.getElementById('chat-box');
@@ -36,7 +41,6 @@ fetch('/trainingData.json') // Correct path for the file in the public folder
     });
 
 let lastSuggestion = null;
-let awaitingServiceName = false;
 
 function enableChatInput() {
     console.log('Enabling chat input'); // Debug log
@@ -65,16 +69,7 @@ function sendMessage() {
     if (userMessage) {
         console.log('User message:', userMessage); // Debug log
         if (userMessage === 'cancel') {
-            cancelOperation(addMessage);
-            resetState();
-            chatInput.value = '';
-            return;
-        }
-
-        if (awaitingServiceName) {
-            const serviceName = userMessage;
-            awaitingServiceName = false;
-            executeRestartService(serviceName, addMessage);
+            cancelOperation(addMessageWithAnimation);
             chatInput.value = '';
             return;
         }
@@ -85,14 +80,10 @@ function sendMessage() {
         } else {
             userMessage = correctSpelling(userMessage);
         }
-        addMessage(userMessage, 'user');
+        addMessageWithAnimation(userMessage, 'user');
         chatInput.value = '';
         respondToUser(userMessage); // Ensure this function is called to generate a response
     }
-}
-
-function resetState() {
-    awaitingServiceName = false;
 }
 
 function correctSpelling(message) {
@@ -105,119 +96,190 @@ function correctSpelling(message) {
     return words.join(' ');
 }
 
-function addMessage(message, sender) {
+// New animation function to replace addMessage
+function addMessageWithAnimation(message, sender, messageId = null) {
     const messageElement = document.createElement('div');
     messageElement.className = `message ${sender}`;
+    
+    if (messageId) {
+        messageElement.setAttribute('data-message-id', messageId);
+    }
+    
     const messageContent = document.createElement('div');
     messageContent.className = 'message-content';
-    messageContent.innerHTML = message;
+    
     messageElement.appendChild(messageContent);
     chatBox.appendChild(messageElement);
     chatBox.scrollTop = chatBox.scrollHeight;
+    
+    // If it's a user message or a status message, show it immediately
+    if (sender === 'user' || message === "Thinking..." || message === "Searching knowledge base...") {
+        messageContent.innerHTML = message;
+        return;
+    }
+    
+    // For bot responses, do word-by-word animation
+    if (sender === 'bot') {
+        // Add typing class to show cursor
+        messageContent.classList.add('typing');
+        
+        // Split message into words and punctuation
+        const words = message.match(/[\w']+|[.,!?;:]|\n/g) || [];
+        let wordIndex = 0;
+        
+        // Function to type each word with varying speed
+        function typeNextWord() {
+            if (wordIndex < words.length) {
+                const word = words[wordIndex];
+                
+                // Add appropriate spacing
+                if (wordIndex > 0 && !word.match(/[.,!?;:]/) && words[wordIndex-1] !== '\n') {
+                    messageContent.innerHTML += ' ';
+                }
+                
+                // Add the word
+                messageContent.innerHTML += word;
+                wordIndex++;
+                
+                // Scroll to bottom
+                chatBox.scrollTop = chatBox.scrollHeight;
+                
+                // Dynamic delay based on word length and punctuation
+                let delay = 40 + (word.length * 5); // Base delay + extra for longer words
+                
+                // Longer pause after sentence endings
+                if (word.match(/[.!?]$/)) {
+                    delay = 400;
+                } 
+                // Brief pause after commas
+                else if (word.match(/[,;:]$/)) {
+                    delay = 200;
+                }
+                // Longer pause for new lines (like in lists)
+                else if (word === '\n') {
+                    messageContent.innerHTML += '<br>';
+                    delay = 300;
+                }
+                
+                // Schedule next word
+                setTimeout(typeNextWord, delay);
+            } else {
+                // Remove typing class when finished
+                messageContent.classList.remove('typing');
+                
+                // After finishing typing, optionally speak the message
+                if (!isMuted) {
+                    speak(message);
+                }
+            }
+        }
+        
+        // Start typing
+        typeNextWord();
+    }
 }
 
-function respondToUser(userMessage) {
-    console.log('Responding to user message:', userMessage); // Debug log
+// Keep the original addMessage as a fallback or for compatibility
+function addMessage(message, sender) {
+    // Just call the new animation function
+    addMessageWithAnimation(message, sender);
+}
 
-    // Add this block at the top of the function
-    if (userMessage.startsWith("openai:")) {
-        const prompt = userMessage.replace("openai:", "").trim();
-        if (prompt.length === 0) {
-            addMessage("Please provide a question after 'openai:'.", 'bot');
-        } else {
-            askOpenAIThroughBackend(prompt, addMessage);
+async function respondToUser(userMessage) {
+    // Generate unique ID for this message thread
+    const messageId = Date.now();
+    
+    // 1. Check predefined answers
+    if (predefinedAnswers[userMessage]) {
+        addMessageWithAnimation(predefinedAnswers[userMessage], 'bot');
+        // If you want to trigger scripts/playbooks, add your logic here
+        if (userMessage === "run ansible test playbook") {
+            executeAnsibleTestPlaybook(addMessageWithAnimation);
+        } else if (userMessage === "run getosdetails playbook") {
+            executegetosdetailsPlaybook(addMessageWithAnimation);
+        } else if (userMessage === "install ansible") {
+            executeinstallansible(addMessageWithAnimation);
+        } else if (userMessage === "execute hello2.sh") {
+            executehello2script(addMessageWithAnimation);
+        } else if (userMessage === "execute makefolder.sh") {
+            executemakefolderscript(addMessageWithAnimation);
+        } else if (userMessage === "execute helloo.sh") {
+            executehellooscript(addMessageWithAnimation);
+        } else if (userMessage === "execute hello.sh") {
+            executehelloscript(addMessageWithAnimation);
         }
         return;
     }
 
-    const greetings = ["hey", "hi", "hello"];
-    if (greetings.includes(userMessage)) {
-        const botResponse = predefinedAnswers[userMessage] || "Hello! How can I assist you today?";
-        setTimeout(() => {
-            addMessage(botResponse, 'bot');
-            if (!isMuted) {
-                speak(botResponse);
-            }
-        }, 500);
-    } else if (predefinedAnswers[userMessage]) {
-        const botResponse = predefinedAnswers[userMessage];
-        if (userMessage === "getosdetails_linux") {
-            executeGetOSDetailsLinux(addMessage);
-            addMessage(botResponse, 'bot');
-        } else if (userMessage === "restart service") {
-            awaitingServiceName = true;
-            addMessage("Please provide the service name.", 'bot');
-        } else if (userMessage === "run hello world script") {
-            executeHelloWorldScript(addMessage);
-        } else if (userMessage === "run ansible test playbook") {
-            executeAnsibleTestPlaybook(addMessage);
-        } else if (userMessage === "run getosdetails playbook") { // Handle the new playbook command
-            executegetosdetailsPlaybook(addMessage); // Call the function to execute the new playbook
-        } else if (userMessage === "install ansible") { // Handle the new playbook command
-            executeinstallansible(addMessage); // Call the function to execute the new playbook
-        } else if (userMessage === "restartazureagent_linux") {
-            executeRestartAzureAgentLinux(addMessage);
-        } else if (userMessage === "execute hello2.sh") {
-            executehello2script(addMessage);
-        } else if (userMessage === "execute hello.sh") {
-            executeHelloScript(addMessage);
-        } else {
-            addMessage(botResponse, 'bot');
-            if (!isMuted) {
-                speak(botResponse);
-            }
+    // 2. Try /chatbot for command matching
+    addMessageWithAnimation("Thinking...", 'bot', messageId);
+    try {
+        const chatbotResponse = await fetch('/chatbot', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: userMessage })
+        });
+        const chatbotData = await chatbotResponse.json();
+        
+        // Remove the thinking message
+        const thinkingMsg = document.querySelector(`[data-message-id="${messageId}"]`);
+        if (thinkingMsg) thinkingMsg.remove();
+        
+        if (chatbotData.matchedKey && predefinedAnswers[chatbotData.matchedKey]) {
+            // Recursively handle matched command
+            respondToUser(chatbotData.matchedKey);
+            return;
         }
-    } else {
-        // Use OpenAI to map to the best predefined command
-        askOpenAIThroughBackend(userMessage, addMessage);
+    } catch (error) {
+        // Continue to RAG if there's an error
+        const thinkingMsg = document.querySelector(`[data-message-id="${messageId}"]`);
+        if (thinkingMsg) thinkingMsg.remove();
     }
-}
 
-function getSuggestion(message) {
-    const words = Object.keys(predefinedAnswers);
-    for (let i = 0; i < words.length; i++) {
-        if (isSimilar(message, words[i])) {
-            return words[i];
+    // 3. Try RAG knowledge base
+    addMessageWithAnimation("Searching knowledge base...", 'bot', messageId);
+    try {
+        const ragResponse = await fetch('/rag-knowledgebase', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ question: userMessage })
+        });
+        const ragData = await ragResponse.json();
+        
+        // Remove the searching message
+        const searchingMsg = document.querySelector(`[data-message-id="${messageId}"]`);
+        if (searchingMsg) searchingMsg.remove();
+        
+        if (ragData.answer) {
+            // Format lists with line breaks (improved regex)
+            let formattedAnswer = ragData.answer;
+            
+            // Better list detection for numbered lists
+            formattedAnswer = formattedAnswer.replace(/(\d+\.\s+[^\.\n]+)/g, '$1\n');
+            
+            // Also handle bullet points
+            formattedAnswer = formattedAnswer.replace(/(\•\s+[^\.\n]+)/g, '$1\n');
+            
+            addMessageWithAnimation(formattedAnswer, 'bot');
+            return;
         }
+    } catch (err) {
+        // Remove the searching message if there was an error
+        const searchingMsg = document.querySelector(`[data-message-id="${messageId}"]`);
+        if (searchingMsg) searchingMsg.remove();
     }
-    return null;
-}
 
-function isSimilar(word1, word2) {
-    const distance = levenshteinDistance(word1, word2);
-    return distance <= 2; // Allow up to 2 character differences
-}
-
-function levenshteinDistance(a, b) {
-    const matrix = [];
-    for (let i = 0; i <= b.length; i++) {
-        matrix[i] = [i];
-    }
-    for (let j = 0; j <= a.length; j++) {
-        matrix[0][j] = j;
-    }
-    for (let i = 1; i <= b.length; i++) {
-        for (let j = 1; j <= a.length; j++) {
-            if (b.charAt(i - 1) === a.charAt(j - 1)) {
-                matrix[i][j] = matrix[i - 1][j - 1];
-            } else {
-                matrix[i][j] = Math.min(
-                    matrix[i - 1][j - 1] + 1,
-                    Math.min(matrix[i][j - 1] + 1, matrix[i - 1][j] + 1)
-                );
-            }
-        }
-    }
-    return matrix[b.length][a.length];
+    // 4. Fallback
+    addMessageWithAnimation("Sorry, I couldn't get a response from AI.", 'bot');
 }
 
 function speak(text) {
-    if ('speechSynthesis' in window) {
+    if ('speechSynthesis' in window && !isMuted) {
         const utterance = new SpeechSynthesisUtterance(stripHtml(text));
         speechSynthesis.speak(utterance);
         animateMouth();
     } else {
-        console.error('Speech Synthesis not supported in this browser.');
+        console.error('Speech Synthesis not supported in this browser or is muted.');
     }
 }
 
@@ -236,74 +298,42 @@ function animateMouth() {
     }, 2000); // Remove mouth animation after 2 seconds
 }
 
-function executeHelloScript(addMessage) {
-    addMessage("Executing hello.sh script...", 'bot'); // Inform the user about script execution
-    fetch('/run-script', { // Use the correct backend endpoint
+function executeinstallansible(addMessageCallback) {
+    // Use the passed callback function (which should be addMessageWithAnimation)
+    addMessageCallback("installing ansible...", 'bot');
+    fetch('/run-script-installansible', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ scriptPath: 'hello.sh' }) // Pass only the script name
+        body: JSON.stringify({ scriptPath: 'ansible.sh' })
     })
     .then(response => {
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-        return response.json(); // Expect JSON response from the backend
+        return response.json();
     })
     .then(data => {
         if (data.error) {
-            addMessage(`Error executing script: ${data.error}`, 'bot');
+            addMessageCallback(`Error executing script: ${data.error}`, 'bot');
         } else {
-            addMessage(`Script executed successfully: ${data.output}`, 'bot');
+            addMessageCallback(`Script executed successfully: ${data.output}`, 'bot');
         }
     })
     .catch(error => {
         console.error('Error executing script:', error);
-        addMessage(`Error: ${error.message}`, 'bot');
+        addMessageCallback(`Error: ${error.message}`, 'bot');
     });
 }
 
-function executeinstallansible(addMessage) {
-    addMessage("installing ansible...", 'bot'); // Inform the user about script execution
-    fetch('/run-script-installansible', { // Use the correct backend endpoint
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ scriptPath: 'ansible.sh' }) // Pass only the script name
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json(); // Expect JSON response from the backend
-    })
-    .then(data => {
-        if (data.error) {
-            addMessage(`Error executing script: ${data.error}`, 'bot');
-        } else {
-            addMessage(`Script executed successfully: ${data.output}`, 'bot');
-        }
-    })
-    .catch(error => {
-        console.error('Error executing script:', error);
-        addMessage(`Error: ${error.message}`, 'bot');
-    });
+function cancelOperation(addMessageCallback) {
+    // This is a placeholder - replace with your actual cancel logic
+    addMessageCallback("Operation cancelled.", 'bot');
 }
 
-async function askOpenAIThroughBackend(prompt, addMessage) {
-    addMessage("Thinking...", 'bot');
-    try {
-        const response = await fetch('/chatbot', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: prompt })
-        });
-        const data = await response.json();
-        if (data.matchedKey && predefinedAnswers[data.matchedKey]) {
-            // Now call respondToUser with the matched key to trigger the right function
-            respondToUser(data.matchedKey);
-        } else {
-            addMessage("Sorry, I couldn't get a response from AI.", 'bot');
-        }
-    } catch (error) {
-        addMessage("Error contacting AI: " + error.message, 'bot');
-    }
+const logoffButton = document.getElementById('logoff-button');
+if (logoffButton) {
+    logoffButton.addEventListener('click', async () => {
+        await fetch('/api/logoff', { method: 'POST' });
+        window.location.href = '/login.html';
+    });
 }

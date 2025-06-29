@@ -1,22 +1,22 @@
 let isCancelled = false;
 
-function executemakefolderscript(addMessage) {
+function executehelloscript(addMessage) {
     if (isCancelled) {
         addMessage("Operation cancelled.", 'bot');
         isCancelled = false;
         return;
     }
-    addMessage("Executing makefolder.sh script...", 'bot');
-    fetch('/run-shellscript', {
+    addMessage("Executing hello.sh script...", 'bot');
+    fetch('/run-shellscript', { // Use the correct backend endpoint
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ scriptPath: 'makefolder.sh' })
+        body: JSON.stringify({ scriptPath: 'hello.sh' }) // Pass only the script name
     })
     .then(response => {
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-        return response.json();
+        return response.json(); // Expect JSON response from the backend
     })
     .then(data => {
         if (data.error) {
@@ -30,4 +30,4 @@ function executemakefolderscript(addMessage) {
         addMessage(`Error: ${error.message}`, 'bot');
     });
 }
-export { executemakefolderscript };
+export { executehelloscript };

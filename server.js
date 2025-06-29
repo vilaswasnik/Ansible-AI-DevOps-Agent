@@ -4,6 +4,9 @@ const cors = require('cors');
 const path = require('path');
 const { askOpenAI } = require('./public/scripts/openai');
 const predefinedAnswers = require('./public/trainingData.json').predefinedAnswers;
+const fs = require('fs');
+const OpenAI = require('openai');
+require('dotenv').config();
 
 // Optional: Levenshtein distance for fuzzy matching
 function levenshteinDistance(a, b) {
@@ -50,7 +53,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Serve the aiagent HTML file
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'aiagent.html'));
+    res.sendFile(path.join(__dirname, 'public', 'login.html'));
 });
 
 // Endpoint to run a shell script present at script folder -need to remove
@@ -59,6 +62,10 @@ app.post('/run-script', (req, res) => {
     if (!scriptPath) {
         console.error('Script path is missing in the request.');
         return res.status(400).json({ error: 'Script path is required' });
+    }
+    // Block getOSDetailsLinux
+    if (scriptPath.includes('getOSDetailsLinux')) {
+        return res.status(403).json({ error: 'This script is disabled.' });
     }
 
     // Resolve the full path to the script
@@ -78,7 +85,7 @@ app.post('/run-script', (req, res) => {
 });
 
 
-// Endpoint to run a shell script hello2.sh
+// Endpoint to run a shell script hello2.sh. and for all .sh scripts in the shell_scripts folder
 app.post('/run-shellscript', (req, res) => {
     const { scriptPath } = req.body;
 
@@ -100,7 +107,6 @@ app.post('/run-shellscript', (req, res) => {
     const fullScriptPath = path.join(__dirname, 'public', 'scripts', 'shell_scripts', scriptPath);
 
     // Check if the script exists
-    const fs = require('fs');
     if (!fs.existsSync(fullScriptPath)) {
         console.error(`Script not found: ${fullScriptPath}`);
         return res.status(404).json({ error: 'Script not found' });
@@ -184,16 +190,6 @@ app.post('/run-playbook', (req, res) => {
     });
 });
 
-// Endpoint to handle specific commands
-app.post('/run-command', (req, res) => {
-    const { command } = req.body;
-    if (command === 'RestartAzureAgent_Linux') {
-        res.json({ output: 'Azure agent restarted successfully.' });
-    } else {
-        res.status(400).json({ error: 'Unknown command' });
-    }
-});
-
 // Endpoint to handle chatbot messages
 app.post('/chatbot', async (req, res) => {
     const { message } = req.body;
@@ -220,6 +216,104 @@ Reply with the exact command key from the list above that best matches the user'
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
+});
+
+// User management (for admin use)
+const users = {
+    admin: { password: 'admin123', isAdmin: true, temp: false }
+    // Add more users as needed
+};
+
+// Helper to add a user (call this from an admin route)
+function addUser(username, password, temp = true) {
+    users[username] = { password, isAdmin: false, temp };
+}
+
+// Login endpoint
+app.post('/api/login', (req, res) => {
+    const { username, password } = req.body;
+    const user = users[username];
+    if (!user) return res.json({ success: false, message: 'User not found' });
+    if (user.password !== password) return res.json({ success: false, message: 'Incorrect password' });
+    if (user.temp) return res.json({ success: false, resetRequired: true, message: 'Password reset required' });
+    // Set session/cookie here for real security
+    res.json({ success: true });
+});
+
+// Password reset endpoint
+app.post('/api/reset', (req, res) => {
+    const { username, password } = req.body;
+    if (!users[username]) return res.json({ success: false, message: 'User not found' });
+    users[username].password = password;
+    users[username].temp = false;
+    res.json({ success: true, message: 'Password reset successful. Please login.' });
+});
+
+// Logoff endpoint
+app.post('/api/logoff', (req, res) => {
+    // Clear session/cookie logic here
+    res.json({ success: true });
+});
+
+// RAG Knowledge Base endpoint
+const embeddingsPath = path.join(__dirname, 'public/scripts/documents/knowledgeBase_embeddings.json');
+let embeddings = [];
+if (fs.existsSync(embeddingsPath)) {
+    embeddings = JSON.parse(fs.readFileSync(embeddingsPath, 'utf8'));
+}
+
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+app.post('/rag-knowledgebase', async (req, res) => {
+    const { question } = req.body;
+    if (!question) return res.status(400).json({ error: 'Missing question' });
+
+    // Embed the question
+    const embedResponse = await openai.embeddings.create({
+        model: "text-embedding-ada-002",
+        input: question
+    });
+    const questionEmbedding = embedResponse.data[0].embedding;
+
+    // Find the most similar chunk (cosine similarity)
+    function cosineSimilarity(a, b) {
+        let dot = 0, normA = 0, normB = 0;
+        for (let i = 0; i < a.length; i++) {
+            dot += a[i] * b[i];
+            normA += a[i] * a[i];
+            normB += b[i] * b[i];
+        }
+        return dot / (Math.sqrt(normA) * Math.sqrt(normB));
+    }
+
+    let best = { score: -1, text: '' };
+    for (const chunk of embeddings) {
+        const score = cosineSimilarity(questionEmbedding, chunk.embedding);
+        if (score > best.score) best = { score, text: chunk.text };
+    }
+
+    // After calculating cosine similarities for all chunks:
+    const topChunks = embeddings
+      .map(chunk => ({
+        text: chunk.text,
+        score: cosineSimilarity(questionEmbedding, chunk.embedding)
+      }))
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 3);
+
+    const context = topChunks.map(c => c.text).join('\n---\n');
+    // Use this context in your OpenAI completion call
+
+    // Use OpenAI to answer based on the best chunk
+    const completion = await openai.chat.completions.create({
+        model: "gpt-3.5-turbo",
+        messages: [
+            { role: "system", content: "You are an assistant that answers questions using the provided context." },
+            { role: "user", content: `Context: ${context}\n\nQuestion: ${question}` }
+        ]
+    });
+
+    res.json({ answer: completion.choices[0].message.content, context: best.text });
 });
 
 // Start the server

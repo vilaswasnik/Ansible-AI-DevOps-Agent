@@ -1,16 +1,16 @@
 let isCancelled = false;
 
-function executemakefolderscript(addMessage) {
+function executehellooscript(addMessage) {
     if (isCancelled) {
         addMessage("Operation cancelled.", 'bot');
         isCancelled = false;
         return;
     }
-    addMessage("Executing makefolder.sh script...", 'bot');
+    addMessage("Executing helloo.sh script...", 'bot');
     fetch('/run-shellscript', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ scriptPath: 'makefolder.sh' })
+        body: JSON.stringify({ scriptPath: 'helloo.sh' })
     })
     .then(response => {
         if (!response.ok) {
@@ -30,4 +30,4 @@ function executemakefolderscript(addMessage) {
         addMessage(`Error: ${error.message}`, 'bot');
     });
 }
-export { executemakefolderscript };
+export { executehellooscript };

@@ -10,4 +10,16 @@
  what are teh other things you can do ?  - list the things 
  
 8.devlop knowledgebase and call documents -pending 
+--
+
+
+1. Create our own LLM model for NLP - natural language processing 
+2. vector embedding for common documentation
+3. vector embedding through URL 
+4. add a logic to retrive data from website 
+5. add a logic to call ansible API and with pdf and logic , means it should ask to enter server name, path etc what ever required for that playbook to run - 
+6. understand agentic and generative
+7. login /log off 
+
+
 

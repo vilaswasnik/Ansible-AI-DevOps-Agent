@@ -29,6 +29,7 @@ body {
     flex-direction: column;
     align-items: center;
     color: #ffffff; /* White text */
+    position: relative; /* Add this if not already present */
 }
 
 .right-column {
@@ -129,6 +130,15 @@ body {
     color: #ffffff; /* White text */
     border: 1px solid #ddd;
     border-radius: 5px;
+}
+
+.chat-box pre {
+    background: #222;
+    color: #0f0;
+    padding: 8px;
+    border-radius: 4px;
+    font-family: monospace;
+    white-space: pre-wrap;
 }
 
 /* User message (left-aligned) */
@@ -234,7 +244,66 @@ body {
 }
 
 .mute-toggle-button:hover {
-    background-color: #0056b3; /* Darker blue background on hover */
+    background-color: #007bff; /* Darker blue background on hover */
+}
+
+.logoff-button {
+    position: absolute;
+    left: 20px;
+    bottom: 20px;
+    padding: 10px 25px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    z-index: 10;
+}
+
+.login-container {
+    width: 400px;
+    padding: 40px 30px;
+    background: #181818;
+    border-radius: 12px;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.3);
+    margin: 60px auto;
+    text-align: center;
+}
+
+.login-container h2 {
+    font-size: 2rem;
+    margin-bottom: 24px;
+}
+
+#login-form input[type="text"],
+#login-form input[type="password"] {
+    width: 90%;
+    padding: 14px 10px;
+    margin: 14px 0;
+    font-size: 1.1rem;
+    border-radius: 6px;
+    border: 1px solid #444;
+    background: #222;
+    color: #fff;
+}
+
+#login-form button[type="submit"] {
+    width: 90%;
+    padding: 14px 0;
+    font-size: 1.1rem;
+    background: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 18px;
+}
+
+#login-message {
+    margin-top: 18px;
+    color: #ff6666;
+    font-size: 1rem;
 }
 
 function addMessage(message, sender) {
@@ -246,4 +315,15 @@ function addMessage(message, sender) {
     messageElement.appendChild(messageContent);
     chatBox.appendChild(messageElement);
     chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom
+}
+
+/* Add to your CSS */
+.typing::after {
+  content: '|';
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
 }
