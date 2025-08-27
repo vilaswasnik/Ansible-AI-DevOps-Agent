@@ -218,41 +218,274 @@ Reply with the exact command key from the list above that best matches the user'
     }
 });
 
-// User management (for admin use)
-const users = {
-    admin: { password: 'admin123', isAdmin: true, temp: false }
-    // Add more users as needed
+// Secure authentication setup
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const session = require('express-session');
+
+// JWT secret - CHANGE THIS TO A SECURE RANDOM STRING IN PRODUCTION
+const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this-in-production';
+
+// Session configuration
+app.use(session({
+    secret: process.env.SESSION_SECRET || 'your-session-secret-change-this-too',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        secure: false, // Set to true in production with HTTPS
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000 // 24 hours
+    }
+}));
+
+// User management with hashed passwords
+const users = {};
+
+// Initialize with admin user credentials (admin/admin123)
+const initializeAdminUser = async () => {
+    const adminUsername = process.env.ADMIN_USERNAME || 'admin';
+    const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
+
+    if (!users[adminUsername]) {
+        const hashedPassword = await bcrypt.hash(adminPassword, 12);
+        users[adminUsername] = {
+            password: hashedPassword,
+            isAdmin: true,
+            temp: false,
+            createdAt: new Date()
+        };
+        console.log(`Admin user '${adminUsername}' initialized with password '${adminPassword}'`);
+    }
 };
 
-// Helper to add a user (call this from an admin route)
-function addUser(username, password, temp = true) {
-    users[username] = { password, isAdmin: false, temp };
+// Initialize admin user on startup
+initializeAdminUser();
+
+// Secure login endpoint
+app.post('/api/login', async (req, res) => {
+    try {
+        const { username, password } = req.body;
+
+        // Validate input
+        if (!username || !password) {
+            return res.status(400).json({
+                success: false,
+                message: 'Username and password are required'
+            });
+        }
+
+        // Check if user exists
+        const user = users[username];
+        if (!user) {
+            return res.status(401).json({
+                success: false,
+                message: 'Invalid username or password'
+            });
+        }
+
+        // Verify password
+        const isValidPassword = await bcrypt.compare(password, user.password);
+        if (!isValidPassword) {
+            return res.status(401).json({
+                success: false,
+                message: 'Invalid username or password'
+            });
+        }
+
+        // Check if password reset is required
+        if (user.temp) {
+            return res.json({
+                success: false,
+                resetRequired: true,
+                message: 'Password reset required'
+            });
+        }
+
+        // Create JWT token
+        const token = jwt.sign(
+            {
+                username: username,
+                isAdmin: user.isAdmin,
+                exp: Math.floor(Date.now() / 1000) + (24 * 60 * 60) // 24 hours
+            },
+            JWT_SECRET
+        );
+
+        // Set session
+        req.session.user = {
+            username: username,
+            isAdmin: user.isAdmin,
+            loginTime: new Date()
+        };
+
+        // Set HTTP-only cookie with JWT
+        res.cookie('auth_token', token, {
+            httpOnly: true,
+            secure: false, // Set to true in production with HTTPS
+            maxAge: 24 * 60 * 60 * 1000, // 24 hours
+            sameSite: 'strict'
+        });
+
+        console.log(`User ${username} logged in successfully`);
+        res.json({
+            success: true,
+            message: 'Login successful',
+            user: {
+                username: username,
+                isAdmin: user.isAdmin
+            }
+        });
+
+    } catch (error) {
+        console.error('Login error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Internal server error'
+        });
+    }
+});
+
+// Middleware to verify JWT token
+const authenticateToken = (req, res, next) => {
+    const token = req.cookies.auth_token;
+
+    if (!token) {
+        return res.status(401).json({ error: 'Access token required' });
+    }
+
+    try {
+        const decoded = jwt.verify(token, JWT_SECRET);
+        req.user = decoded;
+        next();
+    } catch (error) {
+        return res.status(403).json({ error: 'Invalid or expired token' });
+    }
+};
+
+// Middleware to check if user is admin
+const requireAdmin = (req, res, next) => {
+    if (!req.user.isAdmin) {
+        return res.status(403).json({ error: 'Admin privileges required' });
+    }
+    next();
+};
+
+// Secure password reset endpoint
+app.post('/api/reset', async (req, res) => {
+    try {
+        const { username, password } = req.body;
+
+        if (!username || !password) {
+            return res.status(400).json({
+                success: false,
+                message: 'Username and new password are required'
+            });
+        }
+
+        if (!users[username]) {
+            return res.status(404).json({
+                success: false,
+                message: 'User not found'
+            });
+        }
+
+        // Validate password strength
+        if (password.length < 8) {
+            return res.status(400).json({
+                success: false,
+                message: 'Password must be at least 8 characters long'
+            });
+        }
+
+        // Hash the new password
+        const hashedPassword = await bcrypt.hash(password, 12);
+        users[username].password = hashedPassword;
+        users[username].temp = false;
+
+        console.log(`Password reset successful for user: ${username}`);
+        res.json({
+            success: true,
+            message: 'Password reset successful. Please login with your new password.'
+        });
+
+    } catch (error) {
+        console.error('Password reset error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Internal server error'
+        });
+    }
+});
+
+// Secure logoff endpoint
+app.post('/api/logoff', authenticateToken, (req, res) => {
+    // Clear the session
+    req.session.destroy((err) => {
+        if (err) {
+            console.error('Session destruction error:', err);
+            return res.status(500).json({
+                success: false,
+                message: 'Error during logout'
+            });
+        }
+
+        // Clear the auth cookie
+        res.clearCookie('auth_token');
+        console.log(`User ${req.user.username} logged out successfully`);
+        res.json({
+            success: true,
+            message: 'Logout successful'
+        });
+    });
+});
+
+// Helper to add a user securely (call this from an admin route)
+async function addUser(username, password, temp = true) {
+    if (!username || !password) {
+        throw new Error('Username and password are required');
+    }
+
+    if (password.length < 8) {
+        throw new Error('Password must be at least 8 characters long');
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 12);
+    users[username] = {
+        password: hashedPassword,
+        isAdmin: false,
+        temp: temp,
+        createdAt: new Date()
+    };
+
+    console.log(`User ${username} ${temp ? 'temporarily' : 'permanently'} created`);
+    return users[username];
 }
 
-// Login endpoint
-app.post('/api/login', (req, res) => {
-    const { username, password } = req.body;
-    const user = users[username];
-    if (!user) return res.json({ success: false, message: 'User not found' });
-    if (user.password !== password) return res.json({ success: false, message: 'Incorrect password' });
-    if (user.temp) return res.json({ success: false, resetRequired: true, message: 'Password reset required' });
-    // Set session/cookie here for real security
-    res.json({ success: true });
-});
+// Admin endpoint to add users (protected)
+app.post('/api/admin/add-user', authenticateToken, requireAdmin, async (req, res) => {
+    try {
+        const { username, password, temp = true } = req.body;
 
-// Password reset endpoint
-app.post('/api/reset', (req, res) => {
-    const { username, password } = req.body;
-    if (!users[username]) return res.json({ success: false, message: 'User not found' });
-    users[username].password = password;
-    users[username].temp = false;
-    res.json({ success: true, message: 'Password reset successful. Please login.' });
-});
+        if (users[username]) {
+            return res.status(400).json({
+                success: false,
+                message: 'User already exists'
+            });
+        }
 
-// Logoff endpoint
-app.post('/api/logoff', (req, res) => {
-    // Clear session/cookie logic here
-    res.json({ success: true });
+        await addUser(username, password, temp);
+        res.json({
+            success: true,
+            message: `User ${username} created successfully`
+        });
+
+    } catch (error) {
+        console.error('Add user error:', error);
+        res.status(400).json({
+            success: false,
+            message: error.message
+        });
+    }
 });
 
 // RAG Knowledge Base endpoint

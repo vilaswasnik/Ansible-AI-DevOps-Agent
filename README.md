@@ -202,7 +202,145 @@ The project includes several pre-configured Ansible playbooks:
 - `ansible/getosdetails.yml` - System information gathering
 - `ansible/ansibletest.yml` - Test automation scenarios
 
-## 🔧 Configuration
+## � Development Guide
+
+This section provides guidance on extending the Ansible AI DevOps Agent with custom automation scripts and updating the knowledge base.
+
+### Creating Ansible Playbooks
+
+Ansible playbooks are stored in the `ansible/` directory. To create a new playbook:
+
+1. **Create a new YAML file** in the `ansible/` folder:
+   ```bash
+   touch ansible/your-playbook-name.yml
+   ```
+
+2. **Follow Ansible best practices** for playbook structure:
+   ```yaml
+   ---
+   - name: Your Playbook Description
+     hosts: all
+     become: yes  # Use sudo if needed
+     vars:
+       your_variable: "value"
+     
+     tasks:
+       - name: Task description
+         ansible.builtin.command: echo "Hello World"
+         register: command_output
+         
+       - name: Display output
+         ansible.builtin.debug:
+           msg: "{{ command_output.stdout }}"
+   ```
+
+3. **Test your playbook** before deployment:
+   ```bash
+   ansible-playbook ansible/your-playbook-name.yml -i ansible/inventory
+   ```
+
+4. **Update the web interface** by adding your playbook to the execution options in `public/aiagent.html` if needed.
+
+### Shell Script Storage and Creation
+
+Shell scripts are stored in the `public/scripts/shell_scripts/` directory. To add a new shell script:
+
+1. **Create your script** in the appropriate location:
+   ```bash
+   touch public/scripts/shell_scripts/your-script.sh
+   ```
+
+2. **Make it executable**:
+   ```bash
+   chmod +x public/scripts/shell_scripts/your-script.sh
+   ```
+
+3. **Follow shell script best practices**:
+   ```bash
+   #!/bin/bash
+   
+   # Script header with description
+   # Description: Brief description of what this script does
+   # Usage: ./your-script.sh [parameters]
+   
+   set -e  # Exit on any error
+   
+   # Your script logic here
+   echo "Starting script execution..."
+   
+   # Example task
+   mkdir -p /tmp/example
+   echo "Directory created successfully"
+   ```
+
+4. **Test your script** thoroughly before deploying:
+   ```bash
+   ./public/scripts/shell_scripts/your-script.sh
+   ```
+
+5. **Update the web interface** by adding your script to the execution options in `public/aiagent.html` if needed.
+
+### Updating the Knowledge Base
+
+The knowledge base is used by the AI agent to provide context-aware responses. It consists of:
+- `public/scripts/documents/knowledgeBase.json` - The source knowledge data
+- `public/scripts/documents/knowledgeBase_embeddings.json` - Generated embeddings for AI processing
+
+#### Method 1: Using the Automated Script (Recommended)
+
+1. **Run the setup script**:
+   ```bash
+   cd scripts
+   ./setup_rag_embedding.sh
+   ```
+
+2. **Follow the prompts**:
+   - Enter the base name of your knowledge document (e.g., `knowledgeBase`)
+   - Enter the embedding script name (default: `generateKnowledgeBaseEmbeddings.js`)
+
+#### Method 2: Manual Generation
+
+1. **Ensure your OpenAI API key is set**:
+   ```bash
+   export OPENAI_API_KEY=your_api_key_here
+   ```
+
+2. **Run the embedding generation script**:
+   ```bash
+   cd scripts
+   node generateKnowledgeBaseEmbeddings.js
+   ```
+
+#### Method 3: Custom Knowledge Base
+
+1. **Create or modify** `public/scripts/documents/knowledgeBase.json`:
+   ```json
+   {
+     "components": [
+       {
+         "name": "Your Component",
+         "description": "Description of what this component does",
+         "example_queries": [
+           "How do I use this component?",
+           "What are the available options?"
+         ]
+       }
+     ],
+     "resume": {
+       "summary": "Optional resume or additional context information",
+       "skills": ["skill1", "skill2"],
+       "certifications": ["cert1", "cert2"]
+     }
+   }
+   ```
+
+2. **Generate embeddings** using one of the methods above.
+
+3. **Restart the application** to load the updated knowledge base.
+
+> **Note:** The knowledge base embeddings need to be regenerated whenever you modify the source JSON file. The AI agent uses these embeddings to provide more accurate and context-aware responses.
+
+## �🔧 Configuration
 
 ### Environment Variables
 Create a `.env` file with the following variables:
