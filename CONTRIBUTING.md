@@ -1,6 +1,6 @@
-# Contributing to Ansible AI DevOps Agent
+# Contributing to Ansible-AI-DevOps-Agent
 
-Thank you for your interest in contributing to the Ansible AI DevOps Agent! We welcome contributions from everyone. This document provides guidelines and information for contributors.
+Thank you for your interest in contributing to the Ansible-AI-DevOps-Agent! We welcome contributions from everyone. This document provides guidelines and information for contributors.
 
 ## 📋 Table of Contents
 

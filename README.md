@@ -1,4 +1,4 @@
-# Ansible AI DevOps Agent
+# Ansible-AI-DevOps-Agent
 
 [![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-b### Method 3: Using Docker Image
 
@@ -22,7 +22,7 @@ The application requires user authentication. Use the default credentials to log
 - **Username:** `admin`
 - **Password:** `admin123`
 
-After successful login, you'll be redirected to the main AI DevOps Agent interface.cker&logoColor=white)](https://docker.com)
+After successful login, you'll be redirected to the main Ansible-AI-DevOps-Agent interface.cker&logoColor=white)](https://docker.com)
 [![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org)
 [![Ansible](https://img.shields.io/badge/ansible-%231A1918.svg?style=for-the-badge&logo=ansible&logoColor=white)](https://ansible.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -46,7 +46,7 @@ After successful login, you'll be redirected to the main AI DevOps Agent interfa
 
 ## 🚀 Overview
 
-The Ansible AI DevOps Agent is a comprehensive automation platform that bridges the gap between AI-powered DevOps assistance and infrastructure automation. It provides a user-friendly web interface for executing shell scripts, Ansible playbooks, and AI-driven DevOps operations, making complex infrastructure tasks accessible and efficient.
+The Ansible-AI-DevOps-Agent is a comprehensive automation platform that bridges the gap between AI-powered DevOps assistance and infrastructure automation. It provides a user-friendly web interface for executing shell scripts, Ansible playbooks, and AI-driven DevOps operations, making complex infrastructure tasks accessible and efficient.
 
 ## ✨ Features
 
@@ -202,7 +202,7 @@ The project includes several pre-configured Ansible playbooks:
 
 ## � Development Guide
 
-This section provides guidance on extending the Ansible AI DevOps Agent with custom automation scripts.
+This section provides guidance on extending the Ansible-AI-DevOps-Agent with custom automation scripts.
 
 ### Creating Ansible Playbooks
 
