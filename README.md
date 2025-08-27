@@ -48,6 +48,75 @@ After successful login, you'll be redirected to the main Ansible-AI-DevOps-Agent
 
 The Ansible-AI-DevOps-Agent is a comprehensive automation platform that bridges the gap between AI-powered DevOps assistance and infrastructure automation. It provides a user-friendly web interface for executing shell scripts, Ansible playbooks, and AI-driven DevOps operations, making complex infrastructure tasks accessible and efficient.
 
+## 📊 Detailed Project Flow Diagram
+
+```
+   +-------------------------------------------------------------+
+   |                      Web Browser UI                         |
+   |  (Login, Chat, Command Input, Results/Logs Display)         |
+   +--------------------------+----------------------------------+
+                              |
+                              v
+   +--------------------------+----------------------------------+
+   |                 Express.js Backend (Node.js)                |
+   |  - Auth Middleware (JWT)                                    |
+   |  - API Endpoints:                                           |
+   |      /api/chat (AI Chat)                                    |
+   |      /api/execute (Script/Playbook Execution)               |
+   |      /api/playbooks (List Playbooks)                        |
+   |      /api/health (Health Check)                             |
+   +--------------------------+----------------------------------+
+                              |
+                              v
+   +--------------------------+----------------------------------+
+   |                  Decision Logic Router                      |
+   |  - If /api/chat:                                            |
+   |      |---> OpenAI API (LLM)                                 |
+   |      |       |                                              |
+   |      |       v                                              |
+   |      |   AI Response Generation                             |
+   |      |       |                                              |
+   |      |       v                                              |
+   |      |   Return AI Response to UI                           |
+   |      |                                                      |
+   |  - If /api/execute:                                         |
+   |      |---> Type: ansible                                    |
+   |      |       |                                              |
+   |      |       v                                              |
+   |      |   Run Ansible Playbook (via CLI)                     |
+   |      |       |                                              |
+   |      |       v                                              |
+   |      |   Collect Output/Logs                                |
+   |      |       |                                              |
+   |      |       v                                              |
+   |      |   Return Results to UI                               |
+   |      |                                                      |
+   |      |---> Type: shell                                      |
+   |              |                                              |
+   |              v                                              |
+   |          Run Shell Script (via Bash)                        |
+   |              |                                              |
+   |              v                                              |
+   |          Collect Output/Logs                                |
+   |              |                                              |
+   |              v                                              |
+   |          Return Results to UI                               |
+   +--------------------------+----------------------------------+
+                              |
+                              v
+   +--------------------------+----------------------------------+
+   |                  Results/Logs Feedback                      |
+   |  - Displayed in Web UI                                      |
+   |  - Includes AI responses, script/playbook output, errors     |
+   +-------------------------------------------------------------+
+```
+
+**Flow Description:**
+- User logs in and interacts via chat/commands in the web UI
+- Requests are authenticated and routed by Express.js backend
+- Decision logic sends requests to OpenAI API (for chat) or executes scripts/playbooks
+- Results and logs are returned to the UI for user feedback
+
 ## ✨ Features
 
 ### ✅ Completed Features
