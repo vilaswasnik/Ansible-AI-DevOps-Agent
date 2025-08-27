@@ -128,30 +128,6 @@ app.post('/run-shellscript', (req, res) => {
 
 
 
-// Endpoint to run a installansible
-app.post('/run-script-installansible', (req, res) => {
-    const { scriptPath } = req.body;
-    if (!scriptPath) {
-        console.error('Script path is missing in the request.');
-        return res.status(400).json({ error: 'Script path is required' });
-    }
-
-    // Resolve the full path to the script
-    const fullScriptPath = path.join(__dirname, 'ansible', scriptPath);
-
-    console.log(`Received request to execute script: ${scriptPath}`);
-    console.log(`Resolved full script path: ${fullScriptPath}`);
-
-    exec(`sh ${fullScriptPath}`, (error, stdout, stderr) => {
-        if (error) {
-            console.error(`Error executing script: ${stderr}`);
-            return res.status(500).json({ error: stderr.trim() });
-        }
-        console.log(`Script executed successfully. Output: ${stdout}`);
-        res.json({ output: stdout.trim() });
-    });
-});
-
 // Endpoint to execute the Ansible Hello World playbook
 app.post('/run-ansible-helloworld', (req, res) => {
     const playbookPath = path.join(__dirname, 'public', 'scripts', 'ansiblehelloworld.yml');

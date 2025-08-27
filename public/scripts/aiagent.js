@@ -184,8 +184,6 @@ async function respondToUser(userMessage) {
             executeAnsibleTestPlaybook(addMessageWithAnimation);
         } else if (userMessage === "run getosdetails playbook") {
             executegetosdetailsPlaybook(addMessageWithAnimation);
-        } else if (userMessage === "install ansible") {
-            executeinstallansible(addMessageWithAnimation);
         } else if (userMessage === "execute hello2.sh") {
             executehello2script(addMessageWithAnimation);
         } else if (userMessage === "execute makefolder.sh") {
@@ -225,33 +223,6 @@ async function respondToUser(userMessage) {
 
     // 4. Fallback
     addMessageWithAnimation("Sorry, I couldn't get a response from AI.", 'bot');
-}
-
-function executeinstallansible(addMessageCallback) {
-    // Use the passed callback function (which should be addMessageWithAnimation)
-    addMessageCallback("installing ansible...", 'bot');
-    fetch('/run-script-installansible', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ scriptPath: 'ansible.sh' })
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-    })
-    .then(data => {
-        if (data.error) {
-            addMessageCallback(`Error executing script: ${data.error}`, 'bot');
-        } else {
-            addMessageCallback(`Script executed successfully: ${data.output}`, 'bot');
-        }
-    })
-    .catch(error => {
-        console.error('Error executing script:', error);
-        addMessageCallback(`Error: ${error.message}`, 'bot');
-    });
 }
 
 function cancelOperation(addMessageCallback) {

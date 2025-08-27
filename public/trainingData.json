@@ -20,11 +20,10 @@
     "my name is vilas": "Nice to meet you, Vilas!",
     "what is my name": "I'm sorry, I don't know your name yet. You can tell me by saying 'my name is [your name]'.",
     "execute hello.sh": "Executing hello.sh script...",
-    "install ansible": "Installing ansible...",
     "execute hello2.sh": "Executing hello2.sh script...",
     "execute makefolder.sh": "Executing makefolder.sh script...",
     "run getosdetails playbook": "Executing getosdetails playbook...",
-    "how to install ansible": "To install Ansible, type 'install ansible' in the chatbot or follow the official documentation <a href='https://docs.ansible.com' target='_blank'>here</a>.",
+    "how to install ansible": "To install Ansible, follow the official documentation <a href='https://docs.ansible.com' target='_blank'>here</a>.",
     "how to execute hello.sh": "To execute hello.sh, type 'execute hello.sh' in the chatbot.",
     "how to restart ucd agent": "To restart the UCD agent, type 'open restart ucd agent' or follow the instructions <a href='https://xyz' target='_blank'>here</a>.",
     "how to view logs": "To view logs, type 'show me ucd agent logs' or click <a href='https://xyz' target='_blank'>here</a>.",
@@ -32,8 +31,8 @@
     "what is ucd": "UCD (UrbanCode Deploy) is a tool for automating application deployments across environments.",
     "how to run playbooks": "To run playbooks, type commands like 'run ansible test playbook' or 'run getosdetails playbook'.",
     "how to create azure feature": "To create an Azure feature, type 'create azure feature and story'.",
-    "how to install software": "To install software, type commands like 'install ansible' or 'install azure agent'.",
-    "help": "Here are some things you can ask me: 'run ansible test playbook', 'install ansible', 'execute hello.sh', or 'how to restart ucd agent'.",
+    "how to install software": "To install software, type commands like 'install azure agent' or follow specific installation guides.",
+    "help": "Here are some things you can ask me: 'run ansible test playbook', 'execute hello.sh', 'run getosdetails playbook', or 'how to restart ucd agent'.",
     "i don't understand": "I'm sorry, I didn't understand that. Can you try rephrasing your question or typing 'help' for a list of commands?"
   },
   "spellCorrections": {
