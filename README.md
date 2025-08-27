@@ -1,7 +1,7 @@
-# RAG AI DevOps Agent
+# Ansible AI DevOps Agent
 
 ## Project Overview
-This is an AI-powered DevOps agent with RAG (Retrieval-Augmented Generation) capabilities.
+This is an AI-powered DevOps agent with Ansible automation capabilities and Retrieval-Augmented Generation (RAG) features.
 
 ## Completed Features
 1. ✅ Integrate OpenAI API - DONE
