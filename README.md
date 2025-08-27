@@ -369,7 +369,7 @@ Shell scripts are stored in the `public/scripts/shell_scripts/` directory. To ad
 Create a `.env` file with the following variables:
 
 ```env
-OPENAI_API_KEY=your_openai_api_key_here
+OPENAI_API_KEY=your_openai_api_key_here # Set this locally, do not commit your real API key
 NODE_ENV=production
 PORT=3000
 ADMIN_USERNAME=admin

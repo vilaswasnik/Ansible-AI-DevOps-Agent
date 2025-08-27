@@ -1,3 +1,5 @@
+# Ignore environment variable files
+.env
 # Dependencies
 node_modules/
 npm-debug.log*
