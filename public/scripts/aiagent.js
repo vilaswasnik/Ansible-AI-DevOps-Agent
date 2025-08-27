@@ -16,8 +16,6 @@ const chatBox = document.getElementById('chat-box');
 const chatInput = document.getElementById('chat-input');
 const chatSendButton = document.querySelector('.chat-send-button');
 const botMouth = document.getElementById('bot-mouth');
-const muteToggleButton = document.querySelector('.mute-toggle-button');
-let isMuted = false;
 
 let predefinedAnswers = {};
 let spellCorrections = {};
@@ -49,12 +47,6 @@ function enableChatInput() {
     chatInput.placeholder = "Type a message...";
     chatInput.addEventListener('keypress', handleKeyPress);
     chatSendButton.addEventListener('click', sendMessage); // Ensure the send button calls sendMessage
-    muteToggleButton.addEventListener('click', toggleMute); // Ensure the mute button calls toggleMute
-}
-
-function toggleMute() {
-    isMuted = !isMuted;
-    muteToggleButton.textContent = isMuted ? 'Unmute' : 'Mute'; // Change button text based on mute state
 }
 
 function handleKeyPress(event) {
@@ -166,11 +158,6 @@ function addMessageWithAnimation(message, sender, messageId = null) {
             } else {
                 // Remove typing class when finished
                 messageContent.classList.remove('typing');
-                
-                // After finishing typing, optionally speak the message
-                if (!isMuted) {
-                    speak(message);
-                }
             }
         }
         
@@ -271,31 +258,6 @@ async function respondToUser(userMessage) {
 
     // 4. Fallback
     addMessageWithAnimation("Sorry, I couldn't get a response from AI.", 'bot');
-}
-
-function speak(text) {
-    if ('speechSynthesis' in window && !isMuted) {
-        const utterance = new SpeechSynthesisUtterance(stripHtml(text));
-        speechSynthesis.speak(utterance);
-        animateMouth();
-    } else {
-        console.error('Speech Synthesis not supported in this browser or is muted.');
-    }
-}
-
-function stripHtml(html) {
-    const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = html;
-    return tempDiv.textContent || tempDiv.innerText || '';
-}
-
-function animateMouth() {
-    botMouth.style.display = 'block';
-    botMouth.style.animation = 'talk 0.5s infinite';
-    setTimeout(() => {
-        botMouth.style.animation = 'none';
-        botMouth.style.display = 'none';
-    }, 2000); // Remove mouth animation after 2 seconds
 }
 
 function executeinstallansible(addMessageCallback) {
