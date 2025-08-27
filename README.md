@@ -372,6 +372,19 @@ Create a `.env` file with the following variables:
 OPENAI_API_KEY=your_openai_api_key_here # Set this locally, do not commit your real API key
 NODE_ENV=production
 PORT=3000
+## 🛠️ Post-Clone Setup
+
+After cloning the repository, you must set your own OpenAI API key for the application to work:
+
+1. **Generate an OpenAI API key** from your OpenAI account dashboard.
+2. **Create a `.env` file** in the project root (if it does not exist).
+3. **Add your API key to `.env`**:
+   ```env
+   OPENAI_API_KEY=your_openai_api_key_here
+   ```
+4. **Never commit your real API key to the repository.** The `.env` file is ignored by git for security.
+
+If you previously exposed your API key, revoke it and generate a new one.
 ADMIN_USERNAME=admin
 ADMIN_PASSWORD=admin123
 ```
