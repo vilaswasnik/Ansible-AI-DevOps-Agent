@@ -1,0 +1,12 @@
+---
+- name: Gather Operating System Details
+  hosts: all
+  gather_facts: yes
+  tasks:
+    - name: Display Operating System Details
+      debug:
+        msg:
+          - "Operating System: {{ ansible_os_family }} {{ ansible_distribution }} {{ ansible_distribution_version }}"
+          - "Kernel Version: {{ ansible_kernel }}"
+          - "Architecture: {{ ansible_architecture }}"
+          - "Hostname: {{ ansible_hostname }}"

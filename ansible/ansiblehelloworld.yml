@@ -1,0 +1,6 @@
+--- 
+- name: Test Ansible Installation
+  hosts: codespaces-836681 
+  tasks:
+    - name: Ping controller
+      ping:
