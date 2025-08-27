@@ -6,7 +6,7 @@ function executegetosdetailsPlaybook(addMessage) {
         isCancelled = false;
         return;
     }
-    addMessage("Executing getosdetails Ansible playbook...", 'bot');
+    // Removed duplicate message - predefined answer already shows "Executing getosdetails playbook..."
     const playbookPath = 'getosdetails.yml'; // Playbook name
     const inventoryPath = 'inventory'; // Inventory file name
 

@@ -8,6 +8,7 @@ import { executehelloscript } from './shell_scripts_js/hello.js';
 //for ansible playbooks
 import { executeAnsibleTestPlaybook } from './ansible_scripts_js/ansibleTestPlaybook.js';
 import { executegetosdetailsPlaybook } from './ansible_scripts_js/getosdetails.js';
+import { listAvailablePlaybooks } from './ansible_scripts_js/listPlaybooks.js';
 
 
 
@@ -182,10 +183,26 @@ async function respondToUser(userMessage) {
         // If you want to trigger scripts/playbooks, add your logic here
         if (userMessage === "run ansible test playbook") {
             executeAnsibleTestPlaybook(addMessageWithAnimation);
+        } else if (userMessage === "run the ansible test playbook") {
+            executeAnsibleTestPlaybook(addMessageWithAnimation);
         } else if (userMessage === "run getosdetails playbook") {
             executegetosdetailsPlaybook(addMessageWithAnimation);
+        } else if (userMessage === "get os details using ansible") {
+            executegetosdetailsPlaybook(addMessageWithAnimation);
+        } else if (userMessage === "what are the ansible playbooks available") {
+            listAvailablePlaybooks(addMessageWithAnimation);
+        } else if (userMessage === "list ansible playbooks") {
+            listAvailablePlaybooks(addMessageWithAnimation);
+        } else if (userMessage === "show me ansible playbooks") {
+            listAvailablePlaybooks(addMessageWithAnimation);
         } else if (userMessage === "execute hello2.sh") {
             executehello2script(addMessageWithAnimation);
+        } else if (userMessage === "run hello2.sh for me") {
+            executehello2script(addMessageWithAnimation);
+        } else if (userMessage === "execute hello.sh") {
+            executehelloscript(addMessageWithAnimation);
+        } else if (userMessage === "execute hello.sh script") {
+            executehelloscript(addMessageWithAnimation);
         } else if (userMessage === "execute makefolder.sh") {
             executemakefolderscript(addMessageWithAnimation);
         } else if (userMessage === "execute helloo.sh") {

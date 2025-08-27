@@ -6,7 +6,7 @@ function executehellooscript(addMessage) {
         isCancelled = false;
         return;
     }
-    addMessage("Executing helloo.sh script...", 'bot');
+    // Removed duplicate message - predefined answer already shows "Executing helloo.sh script..."
     fetch('/run-shellscript', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

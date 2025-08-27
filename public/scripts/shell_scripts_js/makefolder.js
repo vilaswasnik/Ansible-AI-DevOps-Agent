@@ -6,7 +6,7 @@ function executemakefolderscript(addMessage) {
         isCancelled = false;
         return;
     }
-    addMessage("Executing makefolder.sh script...", 'bot');
+    // Removed duplicate message - predefined answer already shows "Executing makefolder.sh script..."
     fetch('/run-shellscript', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

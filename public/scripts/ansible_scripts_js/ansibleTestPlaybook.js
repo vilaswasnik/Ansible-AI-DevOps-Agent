@@ -6,7 +6,7 @@ function executeAnsibleTestPlaybook(addMessage) {
         isCancelled = false;
         return;
     }
-    addMessage("Executing Ansible test playbook...", 'bot');
+    // Removed duplicate message - predefined answer already shows "Executing Ansible test playbook..."
     const playbookPath = 'ansiblehelloworld.yml'; // Playbook name
     const inventoryPath = 'inventory'; // Inventory file name
 

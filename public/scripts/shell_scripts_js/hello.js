@@ -6,7 +6,7 @@ function executehelloscript(addMessage) {
         isCancelled = false;
         return;
     }
-    addMessage("Executing hello.sh script...", 'bot');
+    // Removed duplicate message - predefined answer already shows "Executing hello.sh script..."
     fetch('/run-shellscript', { // Use the correct backend endpoint
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

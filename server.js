@@ -166,6 +166,30 @@ app.post('/run-playbook', (req, res) => {
     });
 });
 
+// Endpoint to list available Ansible playbooks
+app.get('/list-playbooks', (req, res) => {
+    const ansibleDir = path.join(__dirname, 'ansible');
+    
+    try {
+        // Read all files in ansible directory
+        const files = fs.readdirSync(ansibleDir);
+        
+        // Filter for .yml and .yaml files (Ansible playbooks)
+        const playbooks = files.filter(file => 
+            file.endsWith('.yml') || file.endsWith('.yaml')
+        ).map(file => file.replace(/\.yml$|\.yaml$/, ''));
+        
+        res.json({ 
+            playbooks: playbooks,
+            count: playbooks.length,
+            message: `Found ${playbooks.length} Ansible playbooks in your ansible folder:`
+        });
+    } catch (error) {
+        console.error('Error reading ansible directory:', error);
+        res.status(500).json({ error: 'Unable to read ansible directory' });
+    }
+});
+
 // Endpoint to handle chatbot messages
 app.post('/chatbot', async (req, res) => {
     const { message } = req.body;
