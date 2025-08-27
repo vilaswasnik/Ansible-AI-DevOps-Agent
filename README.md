@@ -56,7 +56,6 @@ The Ansible AI DevOps Agent is a comprehensive automation platform that bridges 
 - **Docker Containerization** - Ready-to-deploy containerized solution
 - **Shell Script Execution** - Execute custom shell scripts securely
 - **Ansible Playbook Integration** - Run Ansible automation playbooks
-- **Knowledge Base** - Document retrieval and embedding system
 - **Environment Management** - Secure environment variable handling
 
 ### 🔄 In Development
@@ -64,7 +63,6 @@ The Ansible AI DevOps Agent is a comprehensive automation platform that bridges 
 - Code optimization and automation enhancements
 - Ansible API integration with AWX environment
 - Custom LLM model integration
-- Vector embedding for advanced document processing
 - Website data retrieval capabilities
 - Enhanced login/logout functionality
 
@@ -204,7 +202,7 @@ The project includes several pre-configured Ansible playbooks:
 
 ## � Development Guide
 
-This section provides guidance on extending the Ansible AI DevOps Agent with custom automation scripts and updating the knowledge base.
+This section provides guidance on extending the Ansible AI DevOps Agent with custom automation scripts.
 
 ### Creating Ansible Playbooks
 
@@ -280,65 +278,9 @@ Shell scripts are stored in the `public/scripts/shell_scripts/` directory. To ad
 
 5. **Update the web interface** by adding your script to the execution options in `public/aiagent.html` if needed.
 
-### Updating the Knowledge Base
+## 🔧 Configuration
 
-The knowledge base is used by the AI agent to provide context-aware responses. It consists of:
-- `public/scripts/documents/knowledgeBase.json` - The source knowledge data
-- `public/scripts/documents/knowledgeBase_embeddings.json` - Generated embeddings for AI processing
-
-#### Method 1: Using the Automated Script (Recommended)
-
-1. **Run the setup script**:
-   ```bash
-   cd scripts
-   ./setup_rag_embedding.sh
-   ```
-
-2. **Follow the prompts**:
-   - Enter the base name of your knowledge document (e.g., `knowledgeBase`)
-   - Enter the embedding script name (default: `generateKnowledgeBaseEmbeddings.js`)
-
-#### Method 2: Manual Generation
-
-1. **Ensure your OpenAI API key is set**:
-   ```bash
-   export OPENAI_API_KEY=your_api_key_here
-   ```
-
-2. **Run the embedding generation script**:
-   ```bash
-   cd scripts
-   node generateKnowledgeBaseEmbeddings.js
-   ```
-
-#### Method 3: Custom Knowledge Base
-
-1. **Create or modify** `public/scripts/documents/knowledgeBase.json`:
-   ```json
-   {
-     "components": [
-       {
-         "name": "Your Component",
-         "description": "Description of what this component does",
-         "example_queries": [
-           "How do I use this component?",
-           "What are the available options?"
-         ]
-       }
-     ],
-     "resume": {
-       "summary": "Optional resume or additional context information",
-       "skills": ["skill1", "skill2"],
-       "certifications": ["cert1", "cert2"]
-     }
-   }
-   ```
-
-2. **Generate embeddings** using one of the methods above.
-
-3. **Restart the application** to load the updated knowledge base.
-
-> **Note:** The knowledge base embeddings need to be regenerated whenever you modify the source JSON file. The AI agent uses these embeddings to provide more accurate and context-aware responses.
+### Environment Variables
 
 ## �🔧 Configuration
 

@@ -488,67 +488,6 @@ app.post('/api/admin/add-user', authenticateToken, requireAdmin, async (req, res
     }
 });
 
-// RAG Knowledge Base endpoint
-const embeddingsPath = path.join(__dirname, 'public/scripts/documents/knowledgeBase_embeddings.json');
-let embeddings = [];
-if (fs.existsSync(embeddingsPath)) {
-    embeddings = JSON.parse(fs.readFileSync(embeddingsPath, 'utf8'));
-}
-
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-
-app.post('/rag-knowledgebase', async (req, res) => {
-    const { question } = req.body;
-    if (!question) return res.status(400).json({ error: 'Missing question' });
-
-    // Embed the question
-    const embedResponse = await openai.embeddings.create({
-        model: "text-embedding-ada-002",
-        input: question
-    });
-    const questionEmbedding = embedResponse.data[0].embedding;
-
-    // Find the most similar chunk (cosine similarity)
-    function cosineSimilarity(a, b) {
-        let dot = 0, normA = 0, normB = 0;
-        for (let i = 0; i < a.length; i++) {
-            dot += a[i] * b[i];
-            normA += a[i] * a[i];
-            normB += b[i] * b[i];
-        }
-        return dot / (Math.sqrt(normA) * Math.sqrt(normB));
-    }
-
-    let best = { score: -1, text: '' };
-    for (const chunk of embeddings) {
-        const score = cosineSimilarity(questionEmbedding, chunk.embedding);
-        if (score > best.score) best = { score, text: chunk.text };
-    }
-
-    // After calculating cosine similarities for all chunks:
-    const topChunks = embeddings
-      .map(chunk => ({
-        text: chunk.text,
-        score: cosineSimilarity(questionEmbedding, chunk.embedding)
-      }))
-      .sort((a, b) => b.score - a.score)
-      .slice(0, 3);
-
-    const context = topChunks.map(c => c.text).join('\n---\n');
-    // Use this context in your OpenAI completion call
-
-    // Use OpenAI to answer based on the best chunk
-    const completion = await openai.chat.completions.create({
-        model: "gpt-3.5-turbo",
-        messages: [
-            { role: "system", content: "You are an assistant that answers questions using the provided context." },
-            { role: "user", content: `Context: ${context}\n\nQuestion: ${question}` }
-        ]
-    });
-
-    res.json({ answer: completion.choices[0].message.content, context: best.text });
-});
-
 // Start the server
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);

@@ -223,39 +223,6 @@ async function respondToUser(userMessage) {
         if (thinkingMsg) thinkingMsg.remove();
     }
 
-    // 3. Try RAG knowledge base
-    addMessageWithAnimation("Searching knowledge base...", 'bot', messageId);
-    try {
-        const ragResponse = await fetch('/rag-knowledgebase', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ question: userMessage })
-        });
-        const ragData = await ragResponse.json();
-        
-        // Remove the searching message
-        const searchingMsg = document.querySelector(`[data-message-id="${messageId}"]`);
-        if (searchingMsg) searchingMsg.remove();
-        
-        if (ragData.answer) {
-            // Format lists with line breaks (improved regex)
-            let formattedAnswer = ragData.answer;
-            
-            // Better list detection for numbered lists
-            formattedAnswer = formattedAnswer.replace(/(\d+\.\s+[^\.\n]+)/g, '$1\n');
-            
-            // Also handle bullet points
-            formattedAnswer = formattedAnswer.replace(/(\•\s+[^\.\n]+)/g, '$1\n');
-            
-            addMessageWithAnimation(formattedAnswer, 'bot');
-            return;
-        }
-    } catch (err) {
-        // Remove the searching message if there was an error
-        const searchingMsg = document.querySelector(`[data-message-id="${messageId}"]`);
-        if (searchingMsg) searchingMsg.remove();
-    }
-
     // 4. Fallback
     addMessageWithAnimation("Sorry, I couldn't get a response from AI.", 'bot');
 }
