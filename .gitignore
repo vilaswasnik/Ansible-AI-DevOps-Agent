@@ -145,9 +145,20 @@ logs
 *~
 
 # Archive files
+*.tar
 *.tar.gz
+*.tar.bz2
+*.tar.xz
+*.tar.Z
+*.tgz
+*.tbz2
+*.txz
 *.zip
 *.rar
+*.7z
+*.gz
+*.bz2
+*.xz
 
 # Docker
 .dockerignore
