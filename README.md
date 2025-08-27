@@ -379,6 +379,9 @@ ADMIN_PASSWORD=admin123
 ### Docker Configuration
 The project includes optimized Docker configuration:
 - Multi-stage builds for smaller images
+ 
+# Install required authentication and session modules
+npm install bcrypt jsonwebtoken express-session cookie-parser
 - Ansible pre-installed in containers
 - Volume mounting for development
 - Environment variable support for secure credential management
