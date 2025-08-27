@@ -17,12 +17,24 @@ Once the application is running, access the web interface at **http://localhost:
 
 ### 🔐 Authentication
 
-The application requires user authentication. Use the default credentials to log in:
 
-- **Username:** `admin`
-- **Password:** `admin123`
+The application requires user authentication. Credentials must be set securely using environment variables:
 
-After successful login, you'll be redirected to the main Ansible-AI-DevOps-Agent interface.cker&logoColor=white)](https://docker.com)
+```bash
+export ADMIN_USERNAME=your_admin_username
+export ADMIN_PASSWORD=your_secure_password
+```
+
+Or create a `.env` file:
+
+```env
+ADMIN_USERNAME=your_admin_username
+ADMIN_PASSWORD=your_secure_password
+```
+
+> **⚠️ Security Note:** Never use default or hardcoded credentials in production. Always set strong, unique usernames and passwords via environment variables. Do not publish sensitive credentials in public documentation or repositories.
+
+After successful login, you'll be redirected to the main Ansible-AI-DevOps-Agent interface.
 [![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org)
 [![Ansible](https://img.shields.io/badge/ansible-%231A1918.svg?style=for-the-badge&logo=ansible&logoColor=white)](https://ansible.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
