@@ -1,31 +1,299 @@
 # Ansible AI DevOps Agent
 
-## Project Overview
-This is an AI-powered DevOps agent with Ansible automation capabilities and Retrieval-Augmented Generation (RAG) features.
+[![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)](https://docker.com)
+[![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org)
+[![Ansible](https://img.shields.io/badge/ansible-%231A1918.svg?style=for-the-badge&logo=ansible&logoColor=white)](https://ansible.com)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-## Completed Features
-1. ✅ Integrate OpenAI API - DONE
-2. ✅ Web interface with chat functionality
-3. ✅ Docker container setup
-4. ✅ Shell script execution capabilities
-5. ✅ Ansible playbook integration
+> An intelligent DevOps automation agent that combines the power of Ansible with AI-driven capabilities for streamlined infrastructure management and deployment automation.
 
-## Pending Features
-4. Push to Kubernetes cluster and hosting
-5. Code optimization and automation scripts
-6. Ansible API integration with AWX environment
-7. Knowledge base development with document retrieval
-8. Custom LLM model for NLP
-9. Vector embedding for documentation
-10. Vector embedding through URL
-11. Website data retrieval logic
-12. Ansible API with PDF logic (server name, path inputs)
-13. Agentic and generative AI understanding
-14. Enhanced login/logout functionality
+## 📋 Table of Contents
 
-## Technical Stack
-- Node.js/Express backend
-- OpenAI API integration
-- Ansible automation
-- Docker containerization
-- Shell script execution
+- [🚀 Overview](#-overview)
+- [✨ Features](#-features)
+- [🛠️ Tech Stack](#️-tech-stack)
+- [📋 Prerequisites](#-prerequisites)
+- [🚀 Installation](#-installation)
+- [📖 Usage](#-usage)
+- [🔧 Configuration](#-configuration)
+- [📁 Project Structure](#-project-structure)
+- [🤝 Contributing](#-contributing)
+- [📝 License](#-license)
+- [🙋 Support](#-support)
+- [🔮 Roadmap](#-roadmap)
+
+## 🚀 Overview
+
+The Ansible AI DevOps Agent is a comprehensive automation platform that bridges the gap between AI-powered DevOps assistance and infrastructure automation. It provides a user-friendly web interface for executing shell scripts, Ansible playbooks, and AI-driven DevOps operations, making complex infrastructure tasks accessible and efficient.
+
+## ✨ Features
+
+### ✅ Completed Features
+- **OpenAI API Integration** - AI-powered DevOps assistance
+- **Web Chat Interface** - User-friendly web interface for interactions
+- **Docker Containerization** - Ready-to-deploy containerized solution
+- **Shell Script Execution** - Execute custom shell scripts securely
+- **Ansible Playbook Integration** - Run Ansible automation playbooks
+- **Knowledge Base** - Document retrieval and embedding system
+- **Environment Management** - Secure environment variable handling
+
+### 🔄 In Development
+- Kubernetes cluster deployment and hosting
+- Code optimization and automation enhancements
+- Ansible API integration with AWX environment
+- Custom LLM model integration
+- Vector embedding for advanced document processing
+- Website data retrieval capabilities
+- Enhanced login/logout functionality
+
+## 🛠️ Tech Stack
+
+- **Backend**: Node.js, Express.js
+- **AI**: OpenAI API integration
+- **Automation**: Ansible
+- **Containerization**: Docker & Docker Compose
+- **Frontend**: HTML, CSS, JavaScript
+- **Version Control**: Git
+
+## 📋 Prerequisites
+
+Before you begin, ensure you have the following installed:
+
+- **Docker & Docker Compose** (recommended)
+- **Node.js 20+** (for local development)
+- **Ansible** (for local playbook execution)
+- **OpenAI API Key** (for AI features)
+
+## 🚀 Installation
+
+### Method 1: Docker (Recommended)
+
+```bash
+# Clone the repository
+git clone https://github.com/vilaswasnik/Ansible-AI-DevOps-Agent.git
+cd Ansible-AI-DevOps-Agent
+
+# Build and run with Docker Compose
+docker-compose up --build
+```
+
+### Method 2: Local Development
+
+```bash
+# Clone the repository
+git clone https://github.com/vilaswasnik/Ansible-AI-DevOps-Agent.git
+cd Ansible-AI-DevOps-Agent
+
+# Install Node.js dependencies
+npm install
+
+# Install Ansible (Ubuntu/Debian)
+sudo apt-get update
+sudo apt-get install ansible
+
+# Set up environment variables
+cp .env.example .env
+# Edit .env file with your OpenAI API key
+
+# Start the development server
+npm start
+# or for development with auto-reload
+npm run dev
+```
+
+### Method 3: Using Docker Image
+
+```bash
+# Pull and run the pre-built image
+docker run -p 3000:3000 \
+  -e OPENAI_API_KEY=your_api_key_here \
+  vilaswasnik/ansible-ai-devops-agent:latest
+```
+
+## 📖 Usage
+
+Once the application is running, access the web interface at **http://localhost:3000**
+
+### Web Interface Features
+
+1. **AI Chat Interface**
+   - Interact with the AI agent for DevOps assistance
+   - Get recommendations for infrastructure automation
+   - Execute natural language commands
+
+2. **Script Execution**
+   - Run shell scripts securely through the web interface
+   - Execute Ansible playbooks with real-time output
+   - Monitor execution logs and results
+
+3. **Ansible Integration**
+   - Browse and execute pre-configured playbooks
+   - Create custom automation workflows
+   - Manage inventory and variables
+
+### API Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/` | Main web interface |
+| `POST` | `/api/chat` | AI chat endpoint |
+| `POST` | `/api/execute` | Execute scripts/playbooks |
+| `GET` | `/api/playbooks` | List available playbooks |
+| `GET` | `/api/health` | Health check endpoint |
+
+### Example Usage
+
+```bash
+# Execute a playbook via API
+curl -X POST http://localhost:3000/api/execute \
+  -H "Content-Type: application/json" \
+  -d '{"type": "ansible", "playbook": "ansiblehelloworld.yml"}'
+```
+
+### Ansible Integration
+
+The project includes several pre-configured Ansible playbooks:
+- `ansible/ansiblehelloworld.yml` - Basic hello world playbook
+- `ansible/getosdetails.yml` - System information gathering
+- `ansible/ansibletest.yml` - Test automation scenarios
+
+## 🔧 Configuration
+
+### Environment Variables
+Create a `.env` file with the following variables:
+
+```env
+OPENAI_API_KEY=your_openai_api_key_here
+NODE_ENV=production
+PORT=3000
+```
+
+### Docker Configuration
+The project includes optimized Docker configuration:
+- Multi-stage builds for smaller images
+- Ansible pre-installed in containers
+- Volume mounting for development
+
+## 📁 Project Structure
+
+```
+Ansible-AI-DevOps-Agent/
+├── .github/               # GitHub configuration
+│   ├── ISSUE_TEMPLATE/    # Issue templates
+│   ├── workflows/         # CI/CD workflows
+│   ├── FUNDING.yml        # Sponsorship information
+│   └── PULL_REQUEST_TEMPLATE.md
+├── public/                # Web interface files
+│   ├── scripts/          # Client-side JavaScript
+│   ├── styles/           # CSS stylesheets
+│   └── *.html            # HTML templates
+├── ansible/              # Ansible playbooks and inventory
+├── scripts/              # Utility scripts
+├── .env.example          # Environment variables template
+├── .gitignore           # Git ignore rules
+├── CODE_OF_CONDUCT.md   # Community guidelines
+├── CONTRIBUTING.md      # Contribution guidelines
+├── Dockerfile           # Docker configuration
+├── docker-compose.yml   # Docker Compose setup
+├── LICENSE              # MIT License
+├── README.md            # This file
+├── SECURITY.md          # Security policy
+├── server.js            # Main application server
+└── package.json         # Node.js dependencies and scripts
+```
+
+## 🤝 Contributing
+
+We welcome contributions from the community! Here's how you can help:
+
+### Ways to Contribute
+
+- 🐛 **Report Bugs**: Use [GitHub Issues](https://github.com/vilaswasnik/Ansible-AI-DevOps-Agent/issues) to report bugs
+- 💡 **Suggest Features**: Share your ideas for new features
+- 📝 **Improve Documentation**: Help make our docs better
+- 🧪 **Write Tests**: Add test cases to improve reliability
+- 🔧 **Code Contributions**: Submit pull requests with fixes or enhancements
+
+### Development Process
+
+1. **Fork** the repository
+2. **Clone** your fork: `git clone https://github.com/your-username/Ansible-AI-DevOps-Agent.git`
+3. **Create** a feature branch: `git checkout -b feature/amazing-feature`
+4. **Make** your changes and **test** thoroughly
+5. **Commit** your changes: `git commit -m 'Add amazing feature'`
+6. **Push** to your branch: `git push origin feature/amazing-feature`
+7. **Open** a Pull Request
+
+### Guidelines
+
+- Follow the existing code style and conventions
+- Write clear, concise commit messages
+- Add tests for new features
+- Update documentation as needed
+- Ensure all tests pass before submitting
+- Be respectful and inclusive in all interactions
+
+### Development Setup
+
+```bash
+# Install development dependencies
+npm install
+
+# Run tests
+npm test
+
+# Run linting
+npm run lint
+
+# Start development server with hot reload
+npm run dev
+```
+
+## � Security
+
+We take security seriously. If you discover a security vulnerability, please:
+
+- **DO NOT** create a public GitHub issue
+- **DO** email us directly at: security@example.com
+- Include detailed information about the vulnerability
+- Allow reasonable time for us to respond and fix the issue
+
+See our [Security Policy](SECURITY.md) for more details.
+
+## � CI/CD
+
+This project uses GitHub Actions for continuous integration and deployment:
+
+- **Automated Testing**: Runs on every push and pull request
+- **Security Scanning**: Uses Trivy to scan for vulnerabilities
+- **Code Quality**: Ensures code standards are maintained
+- **Docker Builds**: Validates container builds
+
+See [.github/workflows/ci.yml](.github/workflows/ci.yml) for the complete CI/CD pipeline.
+
+## �📊 GitHub Stats
+
+![GitHub stars](https://img.shields.io/github/stars/vilaswasnik/Ansible-AI-DevOps-Agent?style=social)
+![GitHub forks](https://img.shields.io/github/forks/vilaswasnik/Ansible-AI-DevOps-Agent?style=social)
+![GitHub issues](https://img.shields.io/github/issues/vilaswasnik/Ansible-AI-DevOps-Agent)
+![GitHub PRs](https://img.shields.io/github/issues-pr/vilaswasnik/Ansible-AI-DevOps-Agent)
+
+## 🙏 Acknowledgments
+
+- **OpenAI** for providing the AI capabilities
+- **Ansible Community** for the automation framework
+- **Docker** for containerization technology
+- **Node.js Community** for the runtime environment
+- All our [contributors](https://github.com/vilaswasnik/Ansible-AI-DevOps-Agent/graphs/contributors) who help make this project better
+
+---
+
+<div align="center">
+
+**Made with ❤️ by [Vilas Wasnik](https://github.com/vilaswasnik)**
+
+⭐ **Star this repository if you find it useful!**
+
+[📧 Contact](mailto:contact@example.com) • [🐛 Issues](https://github.com/vilaswasnik/Ansible-AI-DevOps-Agent/issues) • [📖 Wiki](https://github.com/vilaswasnik/Ansible-AI-DevOps-Agent/wiki)
+
+</div>
