@@ -1,6 +1,28 @@
 # Ansible AI DevOps Agent
 
-[![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)](https://docker.com)
+[![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-b### Method 3: Using Docker Image
+
+```bash
+# Pull and run the pre-built image
+docker run -p 3000:3000 \
+  -e OPENAI_API_KEY=your_api_key_here \
+  -e ADMIN_USERNAME=admin \
+  -e ADMIN_PASSWORD=admin123 \
+  vilaswasnik/ansible-ai-devops-agent:latest
+```
+
+## 📖 Usage
+
+Once the application is running, access the web interface at **http://localhost:3000**
+
+### 🔐 Authentication
+
+The application requires user authentication. Use the default credentials to log in:
+
+- **Username:** `admin`
+- **Password:** `admin123`
+
+After successful login, you'll be redirected to the main AI DevOps Agent interface.cker&logoColor=white)](https://docker.com)
 [![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org)
 [![Ansible](https://img.shields.io/badge/ansible-%231A1918.svg?style=for-the-badge&logo=ansible&logoColor=white)](https://ansible.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -112,7 +134,30 @@ docker run -p 3000:3000 \
 
 ## 📖 Usage
 
-Once the application is running, access the web interface at **http://localhost:3000**
+Once the application is running, Access the web interface at: http://localhost:3000
+
+### Default Login Credentials
+
+**Username:** `admin`  
+**Password:** `admin123`
+
+> **⚠️ Security Note:** These are default credentials for testing. In production, always change the default password and use environment variables for better security.
+
+### Custom Login Credentials
+
+You can set custom admin credentials using environment variables:
+
+```bash
+export ADMIN_USERNAME=your_admin_username
+export ADMIN_PASSWORD=your_secure_password
+```
+
+Or create a `.env` file:
+
+```env
+ADMIN_USERNAME=your_admin_username
+ADMIN_PASSWORD=your_secure_password
+```
 
 ### Web Interface Features
 
@@ -166,6 +211,8 @@ Create a `.env` file with the following variables:
 OPENAI_API_KEY=your_openai_api_key_here
 NODE_ENV=production
 PORT=3000
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD=admin123
 ```
 
 ### Docker Configuration
@@ -173,6 +220,7 @@ The project includes optimized Docker configuration:
 - Multi-stage builds for smaller images
 - Ansible pre-installed in containers
 - Volume mounting for development
+- Environment variable support for secure credential management
 
 ## 📁 Project Structure
 
@@ -260,7 +308,33 @@ We take security seriously. If you discover a security vulnerability, please:
 
 See our [Security Policy](SECURITY.md) for more details.
 
-## � CI/CD
+## 🔐 Security Best Practices
+
+### ⚠️ Important Security Notes
+
+1. **Change Default Credentials**: The default login credentials (`admin`/`admin123`) are for testing only. **Always change them before production deployment.**
+
+2. **Environment Variables**: Use environment variables instead of hardcoding credentials:
+   ```bash
+   export ADMIN_USERNAME=your_secure_username
+   export ADMIN_PASSWORD=your_strong_password
+   ```
+
+3. **HTTPS in Production**: Enable HTTPS and set `secure: true` for cookies in production.
+
+4. **Strong Passwords**: Use complex passwords with a mix of uppercase, lowercase, numbers, and special characters.
+
+5. **Regular Updates**: Keep dependencies updated and monitor for security vulnerabilities.
+
+### Production Deployment Checklist
+- [ ] Change default admin credentials
+- [ ] Enable HTTPS/SSL
+- [ ] Set secure cookie options
+- [ ] Configure firewall rules
+- [ ] Set up monitoring and logging
+- [ ] Regular security audits
+
+## 🚀 CI/CD
 
 This project uses GitHub Actions for continuous integration and deployment:
 
