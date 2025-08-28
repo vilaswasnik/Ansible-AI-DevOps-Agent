@@ -1,163 +1,49 @@
+
 # Ansible-AI-DevOps-Agent
 
-[![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-b### Method 3: Using Docker Image
+Automate DevOps with Ansible and AI. Run playbooks, shell scripts, and chat with an AI agent—all from a simple web UI.
+
+## Quick Start
 
 ```bash
-# Pull and run the pre-built image
+# Run with Docker
 docker run -p 3000:3000 \
-  -e OPENAI_API_KEY=your_api_key_here \
-  -e ADMIN_USERNAME=admin \
-  -e ADMIN_PASSWORD=admin123 \
-  vilaswasnik/ansible-ai-devops-agent:latest
+   -e OPENAI_API_KEY=your_api_key \
+   vilaswasnik/ansible-ai-devops-agent:latest
 ```
-
-## 📖 Usage
-
-Once the application is running, access the web interface at **http://localhost:3000**
-
-### 🔐 Authentication
-
-
-The application requires user authentication. Credentials must be set securely using environment variables:
-
+Or clone and run locally:
 ```bash
-export ADMIN_USERNAME=your_admin_username
-export ADMIN_PASSWORD=your_secure_password
+git clone https://github.com/vilaswasnik/Ansible-AI-DevOps-Agent.git
+cd Ansible-AI-DevOps-Agent
+npm install
+npm start
 ```
 
-Or create a `.env` file:
+## Usage
 
-```env
-ADMIN_USERNAME=your_admin_username
-ADMIN_PASSWORD=your_secure_password
+- Visit **http://localhost:3000**
+- Login is disabled for now—just start and use!
+
+## Features
+
+- AI-powered DevOps chat
+- Run Ansible playbooks & shell scripts
+- Docker support
+- Simple web interface
+
+## Config
+
+Set your OpenAI API key in `.env`:
+```
+OPENAI_API_KEY=your_api_key
 ```
 
-> **⚠️ Security Note:** Never use default or hardcoded credentials in production. Always set strong, unique usernames and passwords via environment variables. Do not publish sensitive credentials in public documentation or repositories.
+## Tech
 
-After successful login, you'll be redirected to the main Ansible-AI-DevOps-Agent interface.
-[![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org)
-[![Ansible](https://img.shields.io/badge/ansible-%231A1918.svg?style=for-the-badge&logo=ansible&logoColor=white)](https://ansible.com)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+Node.js • Express • Ansible • Docker • OpenAI
 
-> An intelligent DevOps automation agent that combines the power of Ansible with AI-driven capabilities for streamlined infrastructure management and deployment automation.
 
-## 📋 Table of Contents
-
-- [🚀 Overview](#-overview)
-- [✨ Features](#-features)
-- [🛠️ Tech Stack](#️-tech-stack)
-- [📋 Prerequisites](#-prerequisites)
-- [🚀 Installation](#-installation)
-- [📖 Usage](#-usage)
-- [🔧 Configuration](#-configuration)
-- [📁 Project Structure](#-project-structure)
-- [🤝 Contributing](#-contributing)
-- [📝 License](#-license)
-- [🙋 Support](#-support)
-- [🔮 Roadmap](#-roadmap)
-
-## 🚀 Overview
-
-The Ansible-AI-DevOps-Agent is a comprehensive automation platform that bridges the gap between AI-powered DevOps assistance and infrastructure automation. It provides a user-friendly web interface for executing shell scripts, Ansible playbooks, and AI-driven DevOps operations, making complex infrastructure tasks accessible and efficient.
-
-## 📊 Detailed Project Flow Diagram
-
-```
-   +-------------------------------------------------------------+
-   |                      Web Browser UI                         |
-   |  (Login, Chat, Command Input, Results/Logs Display)         |
-   +--------------------------+----------------------------------+
-                              |
-                              v
-   +--------------------------+----------------------------------+
-   |                 Express.js Backend (Node.js)                |
-   |  - Auth Middleware (JWT)                                    |
-   |  - API Endpoints:                                           |
-   |      /api/chat (AI Chat)                                    |
-   |      /api/execute (Script/Playbook Execution)               |
-   |      /api/playbooks (List Playbooks)                        |
-   |      /api/health (Health Check)                             |
-   +--------------------------+----------------------------------+
-                              |
-                              v
-   +--------------------------+----------------------------------+
-   |                  Decision Logic Router                      |
-   |  - If /api/chat:                                            |
-   |      |---> OpenAI API (LLM)                                 |
-   |      |       |                                              |
-   |      |       v                                              |
-   |      |   AI Response Generation                             |
-   |      |       |                                              |
-   |      |       v                                              |
-   |      |   Return AI Response to UI                           |
-   |      |                                                      |
-   |  - If /api/execute:                                         |
-   |      |---> Type: ansible                                    |
-   |      |       |                                              |
-   |      |       v                                              |
-   |      |   Run Ansible Playbook (via CLI)                     |
-   |      |       |                                              |
-   |      |       v                                              |
-   |      |   Collect Output/Logs                                |
-   |      |       |                                              |
-   |      |       v                                              |
-   |      |   Return Results to UI                               |
-   |      |                                                      |
-   |      |---> Type: shell                                      |
-   |              |                                              |
-   |              v                                              |
-   |          Run Shell Script (via Bash)                        |
-   |              |                                              |
-   |              v                                              |
-   |          Collect Output/Logs                                |
-   |              |                                              |
-   |              v                                              |
-   |          Return Results to UI                               |
-   +--------------------------+----------------------------------+
-                              |
-                              v
-   +--------------------------+----------------------------------+
-   |                  Results/Logs Feedback                      |
-   |  - Displayed in Web UI                                      |
-   |  - Includes AI responses, script/playbook output, errors     |
-   +-------------------------------------------------------------+
-```
-
-**Flow Description:**
-- User logs in and interacts via chat/commands in the web UI
-- Requests are authenticated and routed by Express.js backend
-- Decision logic sends requests to OpenAI API (for chat) or executes scripts/playbooks
-- Results and logs are returned to the UI for user feedback
-
-## ✨ Features
-
-### ✅ Completed Features
-- **OpenAI API Integration** - AI-powered DevOps assistance
-- **Web Chat Interface** - User-friendly web interface for interactions
-- **Docker Containerization** - Ready-to-deploy containerized solution
-- **Shell Script Execution** - Execute custom shell scripts securely
-- **Ansible Playbook Integration** - Run Ansible automation playbooks
-- **Environment Management** - Secure environment variable handling
-
-### 🔄 In Development
-- Kubernetes cluster deployment and hosting
-- Code optimization and automation enhancements
-- Ansible API integration with AWX environment
-- Custom LLM model integration
-- Website data retrieval capabilities
-- Enhanced login/logout functionality
-
-## 🛠️ Tech Stack
-
-- **Backend**: Node.js, Express.js
-- **AI**: OpenAI API integration
-- **Automation**: Ansible
-- **Containerization**: Docker & Docker Compose
-- **Frontend**: HTML, CSS, JavaScript
-- **Version Control**: Git
-
-## 📋 Prerequisites
-
+Let me know if you want this applied to your README or want to keep any extra details!
 Before you begin, ensure you have the following installed:
 
 - **Docker & Docker Compose** (recommended)
