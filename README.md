@@ -79,7 +79,7 @@ sudo apt-get update
 sudo apt-get install ansible
 
 # Set up environment variables
-cp .env.example .env
+touch .env
 # Edit .env file with your OpenAI API key
 
 # Start the development server
