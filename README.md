@@ -92,21 +92,6 @@ touch public/scripts/shell_scripts/my-script.sh
 chmod +x public/scripts/shell_scripts/my-script.sh
 ```
 
-## Building Docker Image
-
-To build and push your own Docker image:
-
-```bash
-# Run the automated build script
-./build-and-push.sh
-
-# Or manually:
-docker build -t vilaswasnik/ansible-ai-devops-agent:latest .
-docker push vilaswasnik/ansible-ai-devops-agent:latest
-```
-
-See [DOCKER_BUILD.md](DOCKER_BUILD.md) for detailed instructions.
-
 ## Tech Stack
 Node.js • Express • Ansible • Docker • OpenAI API
 

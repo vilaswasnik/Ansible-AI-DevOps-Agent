@@ -1,17 +1,13 @@
 # Use the official Node.js image as the base image
 FROM node:20
 
-# Install Python3, pip, and Ansible using apt
-RUN apt-get update && \
-    apt-get install -y python3 python3-pip ansible
-
-WORKDIR /app
-
-# ...rest of your Dockerfile...
-
-
 # Set the working directory inside the container
 WORKDIR /app
+
+# Install Python3, pip, and Ansible using apt
+RUN apt-get update && \
+    apt-get install -y python3 python3-pip ansible && \
+    rm -rf /var/lib/apt/lists/*
 
 # Copy package.json and package-lock.json to the working directory
 COPY package*.json ./

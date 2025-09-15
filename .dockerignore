@@ -1,2 +1,37 @@
+# Node modules and build artifacts
 node_modules
-npm-debug.log
+npm-debug.log*
+.npm
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Git
+.git
+.gitignore
+
+# IDE and editor files
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Logs
+logs
+*.log
+
+# Coverage and test files
+coverage
+.nyc_output
+
+# Temporary files
+*.tmp
+*.temp
