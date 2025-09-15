@@ -5,14 +5,9 @@
 
 ## Quick Start
 
-**Docker (Recommended):**
-```bash
-docker run -p 3000:3000 -e OPENAI_API_KEY=your_api_key vilaswasnik/ansible-ai-devops-agent:latest
-```
-
 **Local Setup:**
 ```bash
-# 1. Install Node.js 20+ and Ansible (see Prerequisites above)
+# 1. Install Node.js 20+ and Ansible (see Prerequisites below)
 
 # 2. Clone and setup project
 git clone https://github.com/vilaswasnik/Ansible-AI-DevOps-Agent.git
@@ -39,11 +34,6 @@ Then visit **http://localhost:3000** (Login: `admin` / `admin123`)
 
 ## Prerequisites
 
-### Option 1: Docker (Recommended)
-- Docker installed on your system
-- OpenAI API Key
-
-### Option 2: Local Development
 - **Node.js 20+** - [Download here](https://nodejs.org/)
 - **Ansible** - Install via:
   ```bash
@@ -93,7 +83,7 @@ chmod +x public/scripts/shell_scripts/my-script.sh
 ```
 
 ## Tech Stack
-Node.js • Express • Ansible • Docker • OpenAI API
+Node.js • Express • Ansible • OpenAI API
 
 ---
 
