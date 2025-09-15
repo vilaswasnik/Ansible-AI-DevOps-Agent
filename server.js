@@ -134,7 +134,9 @@ app.post('/run-ansible-helloworld', (req, res) => {
     const inventoryPath = path.join(__dirname, 'ansible', 'inventory'); // Ensure inventory path is correct
 
     console.log(`Executing Ansible playbook: ${playbookPath}`);
-    exec(`ansible-playbook -i ${inventoryPath} ${playbookPath}`, (error, stdout, stderr) => {
+    exec(`ansible-playbook -i ${inventoryPath} ${playbookPath}`, {
+        env: { ...process.env, LANG: 'C.UTF-8' }
+    }, (error, stdout, stderr) => {
         if (error) {
             console.error(`Error executing playbook: ${stderr}`);
             return res.status(500).json({ error: stderr.trim() });
@@ -156,7 +158,9 @@ app.post('/run-playbook', (req, res) => {
     const inventoryFullPath = path.join(__dirname, 'ansible', inventoryPath);
 
     console.log(`Executing Ansible playbook: ${playbookFullPath} with inventory: ${inventoryFullPath}`);
-    exec(`ansible-playbook -i ${inventoryFullPath} ${playbookFullPath}`, (error, stdout, stderr) => {
+    exec(`ansible-playbook -i ${inventoryFullPath} ${playbookFullPath}`, {
+        env: { ...process.env, LANG: 'C.UTF-8' }
+    }, (error, stdout, stderr) => {
         if (error) {
             console.error(`Error executing playbook: ${stderr}`);
             return res.status(500).json({ error: stderr.trim() });
