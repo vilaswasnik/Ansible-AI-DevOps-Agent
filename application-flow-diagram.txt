@@ -1,0 +1,70 @@
+┌─────────────────────────────────────────────────────────────────┐
+│              ANSIBLE AI DEVOPS AGENT - APPLICATION FLOW            │
+└─────────────────────────────────────────────────────────────────┘
+
+┌─────────────┐     ┌─────────────┐     ┌─────────────┐
+│    User     │────▶│   Login     │────▶│    Auth     │
+│   Access    │     │ (HTML/JS)   │     │ (JWT/Hash)  │
+└─────────────┘     └─────────────┘     └─────────────┘
+                                                │
+                                                ▼
+                                    ┌─────────────────┐
+                                    │  AI Interface   │
+                                    │ (aiagent.html)  │
+                                    │                 │
+                                    │ • Bot Avatar    │
+                                    │ • Chat Box      │
+                                    │ • Input Field   │
+                                    └─────────────────┘
+                                                │
+                                                ▼
+                           ┌─────────────────────────────────┐
+                           │      USER INSTRUCTION           │
+                           │ "Run ansible test playbook"    │
+                           │ "Execute hello.sh script"      │
+                           │ "Get OS details"                │
+                           └─────────────────────────────────┘
+                                                │
+                                                ▼
+                           ┌─────────────────────────────────┐
+                           │    MESSAGE PROCESSING           │
+                           │ • Spell correction              │
+                           │ • Check predefined answers      │
+                           │ • OpenAI fallback              │
+                           │ • Fuzzy matching               │
+                           └─────────────────────────────────┘
+                                                │
+                        ┌───────────────────────┼───────────────────────┐
+                        ▼                       ▼                       ▼
+              ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+              │   ANSIBLE       │    │  SHELL SCRIPTS  │    │ INFO RESPONSES  │
+              │   PLAYBOOKS     │    │                 │    │                 │
+              │                 │    │ • hello.sh      │    │ • Greetings     │
+              │ • Test Playbook │    │ • hello2.sh     │    │ • Help          │
+              │ • Get OS        │    │ • makefolder.sh │    │ • Capabilities  │
+              │ • List Books    │    │ • timeout: 5s   │    │                 │
+              └─────────────────┘    └─────────────────┘    └─────────────────┘
+                        │                       │                       │
+                        ▼                       ▼                       ▼
+              ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+              │ ansible-playbook│    │   exec('sh')    │    │   Direct Text   │
+              │ -i inventory    │    │   Path validate │    │   Response      │
+              │ playbook.yml    │    │   Type check    │    │                 │
+              └─────────────────┘    └─────────────────┘    └─────────────────┘
+                        │                       │                       │
+                        └───────────────────────┼───────────────────────┘
+                                                ▼
+                           ┌─────────────────────────────────┐
+                           │      RESPONSE TO USER           │
+                           │                                 │
+                           │ • Animated typing effect       │
+                           │ • Display results               │
+                           │ • Error handling               │
+                           │ • Chat history update          │
+                           └─────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────┐
+│                        SECURITY FEATURES                        │
+│ • JWT Authentication • Path Validation • Script Timeouts       │
+│ • Password Hashing   • Type Checking   • Error Handling        │
+└─────────────────────────────────────────────────────────────────┘
