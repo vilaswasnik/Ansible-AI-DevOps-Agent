@@ -1,0 +1,28 @@
+---
+- name: Check Running Processes
+  hosts: centos
+  gather_facts: yes
+  tasks:
+    - name: Display top CPU consuming processes
+      shell: ps aux --sort=-%cpu | head -11
+      register: top_cpu
+
+    - name: Display top memory consuming processes
+      shell: ps aux --sort=-%mem | head -11
+      register: top_mem
+
+    - name: Display process count by user
+      shell: ps aux | awk '{print $1}' | sort | uniq -c | sort -rn
+      register: processes_by_user
+
+    - name: Display all process information
+      debug:
+        msg: |
+          === Top 10 CPU Consuming Processes ===
+          {{ top_cpu.stdout }}
+          
+          === Top 10 Memory Consuming Processes ===
+          {{ top_mem.stdout }}
+          
+          === Process Count by User ===
+          {{ processes_by_user.stdout }}

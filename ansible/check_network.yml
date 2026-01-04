@@ -1,0 +1,36 @@
+---
+- name: Check Network Configuration
+  hosts: centos
+  gather_facts: yes
+  tasks:
+    - name: Display network interfaces
+      shell: ip addr show
+      register: ip_info
+
+    - name: Display routing table
+      shell: ip route show
+      register: route_info
+
+    - name: Display listening ports
+      shell: ss -tulpn
+      register: ports_info
+      become: yes
+
+    - name: Display DNS configuration
+      shell: cat /etc/resolv.conf
+      register: dns_info
+
+    - name: Display all network information
+      debug:
+        msg: |
+          === Network Interfaces ===
+          {{ ip_info.stdout }}
+          
+          === Routing Table ===
+          {{ route_info.stdout }}
+          
+          === Listening Ports ===
+          {{ ports_info.stdout }}
+          
+          === DNS Configuration ===
+          {{ dns_info.stdout }}

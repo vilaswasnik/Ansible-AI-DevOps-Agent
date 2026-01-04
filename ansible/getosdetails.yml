@@ -1,6 +1,6 @@
 ---
 - name: Gather Operating System Details
-  hosts: all
+  hosts: codespaces-836681
   gather_facts: yes
   tasks:
     - name: Display Operating System Details

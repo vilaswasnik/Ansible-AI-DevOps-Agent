@@ -1,0 +1,23 @@
+---
+- name: Check System Logs
+  hosts: centos
+  gather_facts: yes
+  tasks:
+    - name: Get recent system errors from journalctl
+      shell: journalctl -p err -n 20 --no-pager
+      register: recent_errors
+      ignore_errors: yes
+
+    - name: Get last 20 lines of messages log
+      shell: tail -20 /var/log/messages 2>/dev/null || echo "messages log not accessible"
+      register: messages_log
+      ignore_errors: yes
+
+    - name: Display log information
+      debug:
+        msg: |
+          === Recent System Errors (last 20) ===
+          {{ recent_errors.stdout }}
+          
+          === /var/log/messages (last 20 lines) ===
+          {{ messages_log.stdout }}

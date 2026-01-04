@@ -1,0 +1,22 @@
+---
+- name: Check Installed Packages and Updates
+  hosts: centos
+  gather_facts: yes
+  tasks:
+    - name: Check for available updates
+      shell: yum check-update --quiet | wc -l
+      register: updates_count
+      ignore_errors: yes
+
+    - name: List recently installed packages
+      shell: rpm -qa --last | head -20
+      register: recent_packages
+
+    - name: Display package information
+      debug:
+        msg: |
+          === Available Updates ===
+          {{ updates_count.stdout }} packages have updates available
+          
+          === Recently Installed Packages (last 20) ===
+          {{ recent_packages.stdout }}

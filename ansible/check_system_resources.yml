@@ -1,0 +1,40 @@
+---
+- name: Check System Resources (CPU, Memory, Disk)
+  hosts: centos
+  gather_facts: yes
+  tasks:
+    - name: Display CPU information
+      shell: |
+        echo "=== CPU Information ==="
+        lscpu | grep -E "Model name|CPU\(s\)|Thread|Core"
+        echo ""
+        echo "=== CPU Load Average ==="
+        uptime
+      register: cpu_info
+
+    - name: Display Memory usage
+      shell: |
+        echo "=== Memory Information ==="
+        free -h
+        echo ""
+        echo "=== Top 5 Memory Consuming Processes ==="
+        ps aux --sort=-%mem | head -6
+      register: memory_info
+
+    - name: Display Disk usage
+      shell: |
+        echo "=== Disk Usage ==="
+        df -h
+        echo ""
+        echo "=== Inode Usage ==="
+        df -i
+      register: disk_info
+
+    - name: Display all results
+      debug:
+        msg: |
+          {{ cpu_info.stdout }}
+          
+          {{ memory_info.stdout }}
+          
+          {{ disk_info.stdout }}

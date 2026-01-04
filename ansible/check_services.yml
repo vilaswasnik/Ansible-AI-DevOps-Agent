@@ -1,0 +1,22 @@
+---
+- name: Check System Services Status
+  hosts: centos
+  gather_facts: yes
+  tasks:
+    - name: List all failed services
+      shell: systemctl --failed
+      register: failed_services
+      ignore_errors: yes
+
+    - name: List all running services
+      shell: systemctl list-units --type=service --state=running --no-pager
+      register: running_services
+
+    - name: Display service status
+      debug:
+        msg: |
+          === Failed Services ===
+          {{ failed_services.stdout }}
+          
+          === Running Services (first 20) ===
+          {{ running_services.stdout_lines[:20] | join('\n') }}
