@@ -21,9 +21,18 @@ echo "OPENAI_API_KEY=your_actual_api_key_here" > .env
 
 # 5. Start the application
 npm start
+
+# Or use the helper scripts
+./start_app.sh
 ```
 
 Then visit **http://localhost:3000** (Login: `admin` / `admin123`)
+
+To stop the helper-script process:
+
+```bash
+./stop_app.sh
+```
 
 ## What It Does
 
