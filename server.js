@@ -226,13 +226,23 @@ Reply with the exact command key from the list above that best matches the user'
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const session = require('express-session');
+const crypto = require('crypto');
 
-// JWT secret - CHANGE THIS TO A SECURE RANDOM STRING IN PRODUCTION
-const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this-in-production';
+// JWT secret: set JWT_SECRET in your .env. There is no built-in default -
+// if it is not set, a random per-boot secret is generated instead, which
+// means existing tokens stop working when the server restarts.
+const JWT_SECRET = process.env.JWT_SECRET || (() => {
+    console.warn('JWT_SECRET is not set - generating a random per-boot secret. Set JWT_SECRET in .env for stable sessions.');
+    return crypto.randomBytes(32).toString('hex');
+})();
+
+// Session secret: same treatment - env value or the per-boot secret above,
+// never a known string.
+const SESSION_SECRET = process.env.SESSION_SECRET || JWT_SECRET;
 
 // Session configuration
 app.use(session({
-    secret: process.env.SESSION_SECRET || 'your-session-secret-change-this-too',
+    secret: SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
@@ -245,10 +255,17 @@ app.use(session({
 // User management with hashed passwords
 const users = {};
 
-// Initialize with admin user credentials (admin/admin123)
+// Initialize the admin user from the environment (ADMIN_USERNAME /
+// ADMIN_PASSWORD). There is no default password: if ADMIN_PASSWORD is
+// not set, no admin account is created.
 const initializeAdminUser = async () => {
     const adminUsername = process.env.ADMIN_USERNAME || 'admin';
-    const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
+    const adminPassword = process.env.ADMIN_PASSWORD;
+
+    if (!adminPassword) {
+        console.warn('ADMIN_PASSWORD is not set - skipping admin account creation. Set ADMIN_PASSWORD in .env to seed the admin account.');
+        return;
+    }
 
     if (!users[adminUsername]) {
         const hashedPassword = await bcrypt.hash(adminPassword, 12);
@@ -258,7 +275,7 @@ const initializeAdminUser = async () => {
             temp: false,
             createdAt: new Date()
         };
-        console.log(`Admin user '${adminUsername}' initialized with password '${adminPassword}'`);
+        console.log(`Admin user '${adminUsername}' initialized.`);
     }
 };
 

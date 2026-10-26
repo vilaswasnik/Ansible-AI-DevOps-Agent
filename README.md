@@ -2,10 +2,9 @@
 
 **Run Ansible from a chat window.** Type what you want in plain English — "run the Ansible test playbook", "get OS details", "what playbooks are available?" — and this Node.js/Express app answers through OpenAI, executes the matching playbook or script, and streams the real output back to your browser.
 
-![Ansible-AI-DevOps-Agent chat UI](docs/images/chat-ui.png)
 <!-- TODO(author): add a screenshot of the chat UI + a playbook run before publishing. -->
 
-> ⚠️ **Run this only on a machine you control.** By design, the app executes playbooks and scripts requested through its web UI. Keep it on localhost or a trusted network, and change the default login before exposing it anywhere.
+> ⚠️ **Run this only on a machine you control.** By design, the app executes playbooks and scripts requested through its web UI. Keep it on localhost or a trusted network, and set a strong admin password via `.env` before exposing it anywhere.
 
 ## What it does
 
@@ -23,13 +22,13 @@ git clone https://github.com/vilaswasnik/Ansible-AI-DevOps-Agent.git
 cd Ansible-AI-DevOps-Agent
 npm install
 
-echo "OPENAI_API_KEY=your_actual_api_key_here" > .env
+cp .env.example .env   # then edit .env: set OPENAI_API_KEY and ADMIN_PASSWORD
 
 npm start
 # or: ./start_app.sh   (stop with ./stop_app.sh)
 ```
 
-Open **http://localhost:3000** and log in. The seeded login is `admin` / `admin123` — **change it before any non-local use.**
+Open **http://localhost:3000** and log in with the admin account defined in your `.env` (`ADMIN_USERNAME` / `ADMIN_PASSWORD`). The server creates that account at startup only when `ADMIN_PASSWORD` is set — there is no built-in default password.
 
 Try:
 - *"Run the Ansible test playbook"*
